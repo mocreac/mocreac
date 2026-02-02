@@ -1,7 +1,5 @@
 # 👋, I'm George 
-## Freelance Design Solutions
-
-## Some of my services:
+> ## Freelance Design Solutions:
 > Product Designs:
 > [Want to Launch a Product?](mailto:mocreacgeorge@gmail.com)
 >
@@ -10,6 +8,7 @@
 
 ## Inquiries: 
 > [Telegram (@georgemocreac)](https://t.me/georgemocreac)
+
 > [Email (mocreacgeorge@gmail.com)](mailto:mocreacgeorge@gmail.com)
 
 ## Portofolio
