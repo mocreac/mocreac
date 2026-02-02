@@ -1,15 +1,19 @@
-# 👋, I'm George 
+# Hello, I'm George 
 > ## Freelance Design Solutions:
 > Product Designs:
+
 > [Want to Launch a Product?](mailto:mocreacgeorge@gmail.com)
+
 >
+
 > Brand Identity Designs:
+
 > [Need Branding?](https://mocreac.com/brief/)
 
-## Inquiries: 
+>## Inquiries: 
 > [Telegram (@georgemocreac)](https://t.me/georgemocreac)
 
 > [Email (mocreacgeorge@gmail.com)](mailto:mocreacgeorge@gmail.com)
 
-## Portofolio
-### 🚧 Under Construction 🚧
+>## Portofolio
+>### 🚧 Under Construction 🚧
