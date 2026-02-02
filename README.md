@@ -1,8 +1,16 @@
-## Hello! 
-# I'm George Mocreac
+# 👋, I'm George 
+## Freelance Design Solutions
 
-> Product Designer [Want to Launch a Product?](mailto:mocreacgeorge@gmail.com)
+## Some of my services:
+> Product Designs:
+> [Want to Launch a Product?](mailto:mocreacgeorge@gmail.com)
 >
-> Brand Identity Designer [Need Branding?](https://mocreac.com/brief/)
+> Brand Identity Designs:
+> [Need Branding?](https://mocreac.com/brief/)
 
-Contact: [Telegram](https://t.me/georgemocreac)
+## Inquiries: 
+> [Telegram (@georgemocreac)](https://t.me/georgemocreac)
+> [Email (mocreacgeorge@gmail.com)](mailto:mocreacgeorge@gmail.com)
+
+## Portofolio
+### 🚧 Under Construction 🚧
