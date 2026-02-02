@@ -1,4 +1,9 @@
-## Hi there 👋
+## Hello 
+
+Product Designer
+Brand Identity Designer
+
+Contact: t.me/georgemocreac
 
 <!--
 **mocreac/mocreac** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
