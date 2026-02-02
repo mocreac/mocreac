@@ -1,4 +1,4 @@
-# Hello, I'm George 
+# Hello, I'm George Mocreac
 > ## Freelance Design Solutions:
 > Product Designs:
 
