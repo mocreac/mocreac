@@ -1,6 +1,6 @@
 # Hello, I'm George Mocreac
 > ## Freelance Design Solutions: 
-> Product Designs: <br> [Want to Launch a Product?](mailto:mocreacgeorge@gmail.com)
+> Product Designs: <br> [Want to Launch a Product?](mailto:mocreacgeorge@gmail.com) <br>
 > Brand Identity Designs: <br> [Need Branding?](https://mocreac.com/brief/)
 
 >## Inquiries: 
