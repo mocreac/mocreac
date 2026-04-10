@@ -1,4 +1,4 @@
-# George Mocreac — Product & Brand Designer
+# George Mocreac, Product & Brand Designer
 
 I help founders and teams ship products that look intentional and convert.
 
