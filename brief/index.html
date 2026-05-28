@@ -3,79 +3,819 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>George Mocreac - Brief</title>
-        <link href="src/output.css" rel="stylesheet" />
+        <title>Brand Identity Brief · George Mocreac</title>
+        <link rel="icon" type="image/svg+xml" href="../public/favicon.svg" />
+        <link rel="icon" type="image/x-icon" href="../public/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="../public/apple-touch-icon.png" />
+        <script src="../public/favicon-spin.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300..600&display=swap" rel="stylesheet">
         <meta
             name="description"
-            content="George Mocreac - Designer -> Branding | Product Design"
-        />
-        <meta
-            name="keywords"
-            content="George Mocreac, Mocreac, George, Designer, Product, portfolio, branding, logo, web development, projects"
+            content="A short brief so we can see if we're a fit and what to make together."
         />
 
-        <!-- Open Graph / Facebook -->
+        <!-- Open Graph -->
         <meta property="og:type" content="website" />
-        <meta
-            property="og:url"
-            content="https://www.yourwebsite.com/brief.html"
-        />
-        <meta property="og:title" content="George Mocreac - Brief" />
-        <meta
-            property="og:description"
-            content="George Mocreac - Designer -> Branding | Product Design"
-        />
-
+        <meta property="og:url" content="https://mocreac.com/brief/" />
+        <meta property="og:title" content="Brand Identity Brief · George Mocreac" />
+        <meta property="og:description" content="A short brief so we can see if we're a fit and what to make together." />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
-        <meta
-            property="twitter:url"
-            content="https://www.yourwebsite.com/brief.html"
-        />
-        <meta property="twitter:title" content="George Mocreac - Brief" />
-        <meta
-            property="twitter:description"
-            content="George Mocreac - Designer -> Branding | Product Design"
-        />
+        <meta property="twitter:url" content="https://mocreac.com/brief/" />
+        <meta property="twitter:title" content="Brand Identity Brief · George Mocreac" />
+        <meta property="twitter:description" content="A short brief so we can see if we're a fit and what to make together." />
 
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-HD6JH2R6X4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HD6JH2R6X4');
+        </script>
 
-        <link href="src/output.css" rel="stylesheet" />
+        <style>
+            /* ────────── Design tokens (mirrors homepage) ────────── */
+            :root {
+                --sand-50:  #FAFAFA;
+                --sand-100: #F5F5F5;
+                --sand-200: #E6E6E6;
+                --sand-300: #D3D3D3;
+                --sand-400: #A3A3A3;
+                --sand-500: #646464;
+                --sand-600: #535353;
+                --sand-700: #404040;
+                --sand-800: #272727;
+                --sand-900: #1A1A1A;
+                --sand-950: #0B0B0B;
+
+                --pattern-dots: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28' fill='none'><g stroke='%230B0B0B' opacity='0.02'><path d='M28 13.5H0'/><path d='M28 27.5H0'/><path d='M13.5 0V28'/><path d='M27.5 0V28'/></g></svg>");
+            }
+
+            html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+            body {
+                font-family: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+                letter-spacing: -0.02em;
+            }
+            .font-bold, .font-extrabold, .font-black { font-weight: 600 !important; }
+            .tnum { font-variant-numeric: tabular-nums; }
+            h1, h2, h3 { text-wrap: balance; }
+            p, label { text-wrap: pretty; }
+
+            /* ────────── Pills (mirrors homepage) ────────── */
+            .pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 20px;
+                border-radius: 999px;
+                font-weight: 500;
+                font-size: 14px;
+                transition:
+                    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 220ms ease,
+                    box-shadow 220ms ease,
+                    color 220ms ease;
+                cursor: pointer;
+                border: none;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                line-height: 1;
+            }
+            .pill:hover { transform: translateY(-1px); }
+            .pill:active { transform: translateY(0) scale(0.96); }
+            .pill-primary { background: #000; color: white; }
+            .pill-primary:hover { background: var(--sand-900); box-shadow: 0 8px 20px -8px rgba(0,0,0,0.45); }
+            .pill-primary:disabled { background: var(--sand-300); color: var(--sand-500); cursor: not-allowed; transform: none; box-shadow: none; }
+            .pill-secondary { background-color: var(--sand-200); background-image: var(--pattern-dots); color: rgb(17 24 39); }
+            .pill-secondary:hover { background-color: var(--sand-300); }
+            .pill-ghost { background: transparent; color: var(--sand-600); }
+            .pill-ghost:hover { background: var(--sand-100); color: var(--sand-900); }
+
+            /* ────────── Progress indicator ────────── */
+            .progress-track {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+                width: 100%;
+            }
+            .progress-seg {
+                height: 3px;
+                background: var(--sand-200);
+                border-radius: 999px;
+                overflow: hidden;
+                position: relative;
+            }
+            .progress-seg::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: var(--sand-900);
+                border-radius: 999px;
+                transform: scaleX(0);
+                transform-origin: left center;
+                transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .progress-seg.is-done::after,
+            .progress-seg.is-current::after { transform: scaleX(1); }
+
+            /* ────────── Step container ────────── */
+            .step {
+                display: none;
+                opacity: 0;
+                min-height: 600px;
+                transform: translateY(8px);
+                transition:
+                    opacity 380ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .step.is-active {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .step.is-active > * {
+                animation: field-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
+            .step.is-active > *:nth-child(1) { animation-delay: 40ms; }
+            .step.is-active > *:nth-child(2) { animation-delay: 110ms; }
+            .step.is-active > *:nth-child(3) { animation-delay: 180ms; }
+            .step.is-active > *:nth-child(4) { animation-delay: 250ms; }
+            .step.is-active > *:nth-child(5) { animation-delay: 320ms; }
+            .step.is-active > *:nth-child(6) { animation-delay: 390ms; }
+            .step.is-active > *:nth-child(7) { animation-delay: 460ms; }
+            .step.is-active > *:nth-child(8) { animation-delay: 530ms; }
+            @keyframes field-in {
+                from { opacity: 0; transform: translateY(10px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+
+            /* ────────── Form fields ────────── */
+            .field { margin-bottom: 24px; }
+            .field-label {
+                display: block;
+                font-size: 17px;
+                font-weight: 600;
+                color: var(--sand-900);
+                margin-bottom: 10px;
+                line-height: 1.3;
+            }
+            .field-label .req {
+                display: inline-block;
+                width: 0.7em;
+                height: 0.7em;
+                margin-left: 0.25em;
+                color: #FF2E01;
+                vertical-align: 0.15em;
+                line-height: 0;
+            }
+            .field-label .req svg {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+
+            .input, .textarea {
+                width: 100%;
+                background: white;
+                border: 1px solid var(--sand-300);
+                border-radius: 12px;
+                padding: 12px 14px;
+                font-size: 15px;
+                font-family: inherit;
+                color: var(--sand-900);
+                line-height: 1.5;
+                letter-spacing: inherit;
+                transition:
+                    border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+                resize: none;
+                outline: none;
+                -webkit-appearance: none;
+            }
+            .input::placeholder, .textarea::placeholder {
+                color: var(--sand-400);
+            }
+            .input:hover, .textarea:hover {
+                border-color: var(--sand-400);
+            }
+            .input:focus, .textarea:focus {
+                border-color: var(--sand-900);
+                box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+            }
+            .textarea { min-height: 88px; line-height: 1.55; }
+            .field.has-error .input,
+            .field.has-error .textarea,
+            .field.has-error .option-card,
+            .field.has-error .chip-grid {
+                border-color: #C75A4A;
+            }
+            .field.has-error .field-label::after {
+                content: " · required";
+                color: #C75A4A;
+                font-weight: 400;
+                font-size: 13px;
+            }
+
+            /* ────────── Yes/No option cards ────────── */
+            .option-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+            .option-card {
+                position: relative;
+                background-color: var(--sand-200);
+                background-image: var(--pattern-dots);
+                border: 1px solid transparent;
+                border-radius: 14px;
+                padding: 14px 16px;
+                font-size: 15px;
+                font-weight: 500;
+                color: var(--sand-900);
+                cursor: pointer;
+                user-select: none;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition:
+                    background-color 320ms cubic-bezier(0.16, 1, 0.3, 1),
+                    background-image 320ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 320ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+                -webkit-tap-highlight-color: transparent;
+            }
+            .option-card:hover { background-color: var(--sand-300); }
+            .option-card:active { transform: scale(0.985); }
+            .option-card input { position: absolute; opacity: 0; pointer-events: none; }
+            .option-card .radio-dot {
+                width: 18px;
+                height: 18px;
+                border-radius: 999px;
+                border: 1.5px solid var(--sand-400);
+                background: white;
+                flex-shrink: 0;
+                position: relative;
+                transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .option-card .radio-dot::after {
+                content: "";
+                position: absolute;
+                inset: 4px;
+                border-radius: 999px;
+                background: var(--sand-900);
+                transform: scale(0);
+                transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+            .option-card.is-selected {
+                background-color: white;
+                background-image: none;
+                border-color: var(--sand-900);
+                box-shadow:
+                    0 1px 2px rgba(0,0,0,0.04),
+                    0 12px 28px -10px rgba(0,0,0,0.18);
+            }
+            .option-card.is-selected .radio-dot { border-color: var(--sand-900); }
+            .option-card.is-selected .radio-dot::after { transform: scale(1); }
+
+            /* ────────── Associations chips ────────── */
+            .chip-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 2px 0;
+            }
+            .chip {
+                background: white;
+                border: 1px solid var(--sand-300);
+                color: var(--sand-700);
+                border-radius: 999px;
+                padding: 7px 13px;
+                font-size: 13.5px;
+                font-weight: 500;
+                cursor: pointer;
+                user-select: none;
+                transition:
+                    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+                    color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+                -webkit-tap-highlight-color: transparent;
+                line-height: 1;
+            }
+            .chip:hover { border-color: var(--sand-500); color: var(--sand-900); }
+            .chip:active { transform: scale(0.96); }
+            .chip.is-selected {
+                background: var(--sand-900);
+                border-color: var(--sand-900);
+                color: white;
+            }
+            /* ────────── Step navigation ────────── */
+            .step-nav {
+                position: sticky;
+                bottom: 0;
+                z-index: 5;
+                margin-top: 32px;
+                padding: 14px 0 18px;
+                background: var(--sand-50);
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+
+            /* ────────── Success ────────── */
+            .success-card {
+                padding: 48px 8px;
+                text-align: center;
+            }
+            .success-mark {
+                width: 52px;
+                height: 52px;
+                margin: 0 auto 20px;
+                border-radius: 999px;
+                background: #000;
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: pop-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
+            @keyframes pop-in {
+                0% { transform: scale(0.5); opacity: 0; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+
+            /* ────────── Topbar ────────── */
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 20px 24px;
+                max-width: 960px;
+                margin: 0 auto;
+                width: 100%;
+            }
+            .topbar a.brand { display: inline-flex; align-items: center; }
+            .topbar a.brand img { width: 28px; height: 28px; }
+            .topbar nav { display: flex; gap: 16px; font-size: 12px; color: var(--sand-500); }
+            .topbar nav a { transition: color 180ms ease; }
+            .topbar nav a:hover { color: var(--sand-900); text-decoration: underline; }
+
+            /* ────────── Layout ────────── */
+            .shell {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 8px 24px 80px 24px;
+                width: 100%;
+            }
+
+            /* Focus visible polish */
+            :focus-visible { outline: none; }
+            .pill:focus-visible { box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.12); }
+        </style>
     </head>
-    </head>
-    <body style="width: 100vw; height: 100vh; margin: 0; padding: 0">
-        <header
-            class="gap-12 flex justify-center items-center mx-auto w-full lg:w-1/3 p-4 border-b border-gray-300"
-        >
-            <a href="https://mocreac.com" class="flex flex-grow justify-start"
-                ><img
-                    src="../public/logo.svg"
-                    alt="George Mocreac Logo"
-                    class="w-6 h-6"
-            /></a>
-            <a
-                target="_blank"
-                href="https://t.me/georgemocreac"
-                class="text-md font-sans underline"
-                >Telegram</a
-            >
+    <body class="bg-[var(--sand-50)] text-gray-900 min-h-screen flex flex-col">
 
-            <a
-                target="_blank"
-                href="mailto:mocreacgeorge@gmail.com"
-                class="text-md underline"
-                >Email</a
-            >
+        <header>
+            <div class="topbar">
+                <a href="/" class="brand">
+                    <img src="../public/logo.svg" alt="George Mocreac" />
+                </a>
+                <nav>
+                    <a href="https://t.me/georgemocreac" target="_blank" rel="noopener">Telegram</a>
+                    <a href="mailto:mocreacgeorge@gmail.com">Email</a>
+                </nav>
+            </div>
         </header>
-        <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLSf8OuQiHfqLdXSIB9pRs8DkT23Rz03lR5gpcE2aj1R4P-0_YA/viewform?embedded=true"
-            width="100%"
-            height="100%"
-            frameborder="0"
-            marginheight="0"
-            marginwidth="0"
-            ><a href="https://forms.gle/mCgJ4micEaEUhNzX7">Loading…</a></iframe
-        >
+
+        <main class="flex-1 w-full">
+            <div class="shell">
+
+                <!-- Hero -->
+                <section class="pt-6 pb-4">
+                    <h1 class="text-2xl sm:text-3xl font-semibold leading-[1.1] text-[var(--sand-900)]">
+                        Brand Identity Brief
+                    </h1>
+                </section>
+
+                <!-- Progress -->
+                <section class="mb-8">
+                    <div class="progress-track" id="progress-track">
+                        <div class="progress-seg is-current" data-step="1"></div>
+                        <div class="progress-seg" data-step="2"></div>
+                        <div class="progress-seg" data-step="3"></div>
+                        <div class="progress-seg" data-step="4"></div>
+                    </div>
+                </section>
+
+                <!-- Form -->
+                <form id="brief-form" novalidate>
+                    <input type="checkbox" name="botcheck" id="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+                    <input type="hidden" name="access_key" value="ebdac6f9-772f-4835-9056-13096bf12072" />
+                    <input type="hidden" name="subject" id="email-subject" value="New brief · mocreac.com" />
+                    <input type="hidden" name="from_name" id="email-from" value="mocreac.com brief" />
+
+                    <!-- ─────── STEP 1 ─────── -->
+                    <section class="step is-active" data-step="1">
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-name">Your name &amp; contacts<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <input class="input" type="text" id="f-name" name="Name & Contacts" autocomplete="name" placeholder="e.g. Anna Petrova, anna@brand.co" />
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-brand">Full brand / company name<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <input class="input" type="text" id="f-brand" name="Brand / Company" placeholder="The name as you'd write it on a business card" />
+                        </div>
+
+                        <div class="field" data-required data-radio>
+                            <label class="field-label">Ready to invest €1,000+ in an identity worth taking seriously?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <div class="option-row" role="radiogroup" aria-label="Budget">
+                                <label class="option-card">
+                                    <input type="radio" name="Budget Ready" value="Yes" />
+                                    <span class="radio-dot"></span>
+                                    <span>Yes</span>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="Budget Ready" value="No" />
+                                    <span class="radio-dot"></span>
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-timeline">What's the timeline of this project?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-timeline" name="Timeline" placeholder="e.g. Kickoff in early June, soft launch by end of July."></textarea>
+                        </div>
+                    </section>
+
+                    <!-- ─────── STEP 2 ─────── -->
+                    <section class="step" data-step="2">
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-describe">Describe your business<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-describe" name="About the Business" placeholder="We make…   We help…   We sell…"></textarea>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-goals">Short-term &amp; long-term goals<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-goals" name="Goals" placeholder="6 months: …   1 year: …   3 years: …"></textarea>
+                        </div>
+
+                        <div class="field" data-required data-chips>
+                            <label class="field-label">What associations should your customers feel?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <div class="chip-grid" id="associations-grid"></div>
+                            <input type="hidden" name="Associations" id="f-associations" />
+                            <textarea class="textarea mt-3" id="f-assoc-notes" name="Associations · notes" placeholder="Anything to clarify? (optional)"></textarea>
+                        </div>
+                    </section>
+
+                    <!-- ─────── STEP 3 ─────── -->
+                    <section class="step" data-step="3">
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-target">Who is your target customer?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-target" name="Target Customer" placeholder="e.g. 28–40, design-conscious founders in EU/US, $80k–200k, value craft and clarity."></textarea>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-competitors">Who are your competitors?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-competitors" name="Competitors" placeholder="Names + links if you have them."></textarea>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-diff">How do you differentiate yourself?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-diff" name="Differentiation" placeholder="What's the angle nobody else can copy easily?"></textarea>
+                        </div>
+                    </section>
+
+                    <!-- ─────── STEP 4 ─────── -->
+                    <section class="step" data-step="4">
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-expect">What are your expectations for this project?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-expect" name="Expectations" placeholder="Logo system, type pairing, brand guidelines, packaging, web, whatever applies."></textarea>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-usage">Where will the new logo be used?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-usage" name="Logo Usage" placeholder="List the contexts and surfaces it has to live on."></textarea>
+                        </div>
+
+                        <div class="field">
+                            <label class="field-label" for="f-examples">Examples of branding that you like?</label>
+                            <textarea class="textarea" id="f-examples" name="Examples Liked" placeholder="Doesn't need to be in your industry. Anything you keep going back to."></textarea>
+                        </div>
+
+                        <div class="field">
+                            <label class="field-label" for="f-extra">Anything else you'd like to share?</label>
+                            <textarea class="textarea" id="f-extra" name="Anything Else" placeholder="Optional. Context, constraints, opinions, jokes."></textarea>
+                        </div>
+                    </section>
+
+                    <!-- ─────── STEP NAV ─────── -->
+                    <div class="step-nav">
+                        <a href="/" id="home-link" class="pill pill-secondary">Back to home</a>
+                        <button type="button" class="pill pill-secondary" id="btn-back" style="display: none">
+                            Back
+                        </button>
+                        <button type="button" class="pill pill-primary" id="btn-next">
+                            Continue
+                        </button>
+                        <button type="submit" class="pill pill-primary" id="btn-submit" style="display:none">
+                            <span id="submit-label">Send</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- ─────── SUCCESS ─────── -->
+                <section id="success" style="display:none">
+                    <div class="success-card">
+                        <div class="success-mark">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                                <path d="M5 11.5L9.5 16L17 6.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-semibold text-[var(--sand-900)] mb-2">Brief sent.</h2>
+                        <p class="text-[15px] text-[var(--sand-600)] leading-relaxed max-w-[400px] mx-auto">
+                            Thanks for taking the time. I'll read it carefully and get back to you within 1–2 business days.
+                        </p>
+                        <div class="mt-7 flex items-center justify-center gap-2">
+                            <a href="/" class="pill pill-secondary">Back to home</a>
+                            <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="pill pill-primary">Telegram me</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error toast -->
+                <div id="error-toast" style="display:none; margin-top: 16px;" class="text-[14px] text-[#C75A4A] bg-[#FCEEEA] border border-[#F5D7CF] rounded-xl px-4 py-3"></div>
+            </div>
+        </main>
+
+        <footer class="py-6 mt-12 flex items-center justify-between text-xs text-[var(--sand-500)] max-w-[960px] w-full mx-auto px-6">
+            <span class="tnum">© 2026 George Mocreac</span>
+            <a href="/privacy-policy/" class="hover:text-[var(--sand-900)] hover:underline">Privacy</a>
+        </footer>
+
+        <script>
+            // ─────────────────────────────────────────────────────────
+            // Configuration
+            const STORAGE_KEY = "mocreac:brief:v1";
+            const ASSOCIATIONS = [
+                "Approachability","Authenticity","Boldness","Calm","Clarity","Confidence","Craft","Creativity",
+                "Elegance","Energy","Heritage","Innovation","Intelligence","Luxury","Minimalism","Modernity",
+                "Optimism","Playfulness","Power","Precision","Quality","Simplicity","Sophistication","Sustainability",
+                "Trust","Warmth","Wisdom","Wit"
+            ];
+
+            // ─────────────────────────────────────────────────────────
+            // State
+            let currentStep = 1;
+            const TOTAL_STEPS = 4;
+
+            // ─────────────────────────────────────────────────────────
+            // DOM refs
+            const form = document.getElementById("brief-form");
+            const steps = document.querySelectorAll(".step");
+            const progressSegs = document.querySelectorAll(".progress-seg");
+            const btnBack = document.getElementById("btn-back");
+            const btnNext = document.getElementById("btn-next");
+            const btnSubmit = document.getElementById("btn-submit");
+            const submitLabel = document.getElementById("submit-label");
+            const homeLink = document.getElementById("home-link");
+            const errorToast = document.getElementById("error-toast");
+            const successScreen = document.getElementById("success");
+
+            // ─────────────────────────────────────────────────────────
+            // Associations chips
+            const assocGrid = document.getElementById("associations-grid");
+            const assocInput = document.getElementById("f-associations");
+            const selectedAssoc = new Set();
+
+            ASSOCIATIONS.forEach((word) => {
+                const chip = document.createElement("button");
+                chip.type = "button";
+                chip.className = "chip";
+                chip.textContent = word;
+                chip.setAttribute("aria-pressed", "false");
+                chip.addEventListener("click", () => {
+                    if (selectedAssoc.has(word)) {
+                        selectedAssoc.delete(word);
+                        chip.classList.remove("is-selected");
+                        chip.setAttribute("aria-pressed", "false");
+                    } else {
+                        selectedAssoc.add(word);
+                        chip.classList.add("is-selected");
+                        chip.setAttribute("aria-pressed", "true");
+                    }
+                    updateAssoc();
+                    saveDraft();
+                });
+                assocGrid.appendChild(chip);
+            });
+
+            function updateAssoc() {
+                assocInput.value = Array.from(selectedAssoc).join(", ");
+            }
+
+            // ─────────────────────────────────────────────────────────
+            // Radio option cards (Yes / No)
+            document.querySelectorAll(".option-card").forEach((card) => {
+                const input = card.querySelector("input");
+                card.addEventListener("click", () => {
+                    const group = card.closest(".option-row");
+                    group.querySelectorAll(".option-card").forEach(c => c.classList.remove("is-selected"));
+                    card.classList.add("is-selected");
+                    input.checked = true;
+                    saveDraft();
+                });
+            });
+
+            // ─────────────────────────────────────────────────────────
+            // Step navigation
+            function goToStep(n, opts = {}) {
+                currentStep = Math.max(1, Math.min(TOTAL_STEPS, n));
+                steps.forEach((s) => s.classList.remove("is-active"));
+                const target = document.querySelector(`.step[data-step="${currentStep}"]`);
+                target.classList.add("is-active");
+
+                progressSegs.forEach((seg, i) => {
+                    seg.classList.remove("is-current", "is-done");
+                    if (i + 1 < currentStep) seg.classList.add("is-done");
+                    if (i + 1 === currentStep) seg.classList.add("is-current");
+                });
+                btnBack.style.display = currentStep === 1 ? "none" : "inline-flex";
+                homeLink.style.display = currentStep === 1 ? "inline-flex" : "none";
+
+                if (currentStep === TOTAL_STEPS) {
+                    btnNext.style.display = "none";
+                    btnSubmit.style.display = "inline-flex";
+                } else {
+                    btnNext.style.display = "inline-flex";
+                    btnSubmit.style.display = "none";
+                }
+
+                if (!opts.silent) {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+            }
+
+            // ─────────────────────────────────────────────────────────
+            // Validation
+            function validateStep(n) {
+                const stepEl = document.querySelector(`.step[data-step="${n}"]`);
+                let ok = true;
+                const fields = stepEl.querySelectorAll("[data-required]");
+                fields.forEach((f) => {
+                    f.classList.remove("has-error");
+                    let valid = false;
+                    if (f.dataset.radio !== undefined) {
+                        const checked = f.querySelector("input[type=radio]:checked");
+                        valid = !!checked;
+                    } else if (f.dataset.chips !== undefined) {
+                        valid = selectedAssoc.size > 0;
+                    } else {
+                        const input = f.querySelector(".input, .textarea");
+                        valid = input && input.value.trim().length > 0;
+                    }
+                    if (!valid) {
+                        f.classList.add("has-error");
+                        ok = false;
+                    }
+                });
+                return ok;
+            }
+
+            btnNext.addEventListener("click", () => {
+                if (!validateStep(currentStep)) {
+                    const firstError = document.querySelector(`.step[data-step="${currentStep}"] .has-error`);
+                    if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+                    return;
+                }
+                goToStep(currentStep + 1);
+            });
+
+            btnBack.addEventListener("click", () => goToStep(currentStep - 1));
+
+            // Remove error state once user starts typing
+            form.addEventListener("input", (e) => {
+                const field = e.target.closest(".field");
+                if (field) field.classList.remove("has-error");
+                saveDraft();
+            });
+
+            // ─────────────────────────────────────────────────────────
+            // Draft autosave
+            function saveDraft() {
+                const data = {};
+                form.querySelectorAll(".input, .textarea, input[type=hidden]").forEach((el) => {
+                    if (el.name && el.name !== "access_key" && el.name !== "botcheck") {
+                        data[el.name] = el.value;
+                    }
+                });
+                form.querySelectorAll("input[type=radio]:checked").forEach((el) => {
+                    data[el.name] = el.value;
+                });
+                data["__assoc"] = Array.from(selectedAssoc);
+                data["__step"] = currentStep;
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (_) {}
+            }
+
+            function loadDraft() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw) return;
+                    const data = JSON.parse(raw);
+                    form.querySelectorAll(".input, .textarea").forEach((el) => {
+                        if (el.name && data[el.name] !== undefined) el.value = data[el.name];
+                    });
+                    form.querySelectorAll("input[type=radio]").forEach((el) => {
+                        if (data[el.name] === el.value) {
+                            el.checked = true;
+                            const card = el.closest(".option-card");
+                            if (card) card.classList.add("is-selected");
+                        }
+                    });
+                    if (Array.isArray(data["__assoc"])) {
+                        data["__assoc"].forEach(w => selectedAssoc.add(w));
+                        document.querySelectorAll(".chip").forEach(c => {
+                            if (selectedAssoc.has(c.textContent)) {
+                                c.classList.add("is-selected");
+                                c.setAttribute("aria-pressed", "true");
+                            }
+                        });
+                        updateAssoc();
+                    }
+                    // __step intentionally not restored. Always start at 1.
+                } catch (_) {}
+            }
+            loadDraft();
+
+            // ─────────────────────────────────────────────────────────
+            // Auto-resize textareas
+            function autoresize(t) {
+                t.style.height = "auto";
+                t.style.height = Math.min(t.scrollHeight, 400) + "px";
+            }
+            document.querySelectorAll(".textarea").forEach((t) => {
+                t.addEventListener("input", () => autoresize(t));
+                requestAnimationFrame(() => autoresize(t));
+            });
+
+            // ─────────────────────────────────────────────────────────
+            // Submit
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                if (!validateStep(TOTAL_STEPS)) {
+                    const firstError = document.querySelector(`.step[data-step="${TOTAL_STEPS}"] .has-error`);
+                    if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+                    return;
+                }
+                for (let i = 1; i <= TOTAL_STEPS; i++) {
+                    if (!validateStep(i)) {
+                        goToStep(i);
+                        return;
+                    }
+                }
+
+                btnSubmit.disabled = true;
+                submitLabel.textContent = "Sending…";
+
+                const name = document.getElementById("f-name").value.trim();
+                const brand = document.getElementById("f-brand").value.trim();
+                const subject = brand ? `New brief · ${brand}` : "New brief · mocreac.com";
+                document.getElementById("email-subject").value = subject;
+                if (name) document.getElementById("email-from").value = name;
+
+                const fd = new FormData(form);
+
+                try {
+                    const res = await fetch("https://api.web3forms.com/submit", {
+                        method: "POST",
+                        headers: { "Accept": "application/json" },
+                        body: fd
+                    });
+                    const json = await res.json();
+                    if (json.success) {
+                        try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+                        form.style.display = "none";
+                        document.querySelector(".step-nav")?.remove();
+                        successScreen.style.display = "block";
+                        progressSegs.forEach(s => { s.classList.remove("is-current"); s.classList.add("is-done"); });
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        if (window.gtag) gtag("event", "brief_submitted", { event_category: "form" });
+                    } else {
+                        throw new Error(json.message || "Submission failed");
+                    }
+                } catch (err) {
+                    btnSubmit.disabled = false;
+                    submitLabel.textContent = "Send";
+                    errorToast.textContent = "Couldn't send the brief. Please try again, or email mocreacgeorge@gmail.com directly.";
+                    errorToast.style.display = "block";
+                }
+            });
+
+            // Initialise step UI
+            goToStep(1, { silent: true });
+        </script>
     </body>
 </html>
