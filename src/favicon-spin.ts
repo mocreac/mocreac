@@ -1,0 +1,41 @@
+// Rotates the favicon by 90° once per second. Generates the favicon as an
+// inline SVG data URI so a single binary asset can adapt to both light and
+// dark color schemes.
+
+const PATH_D =
+    "M315.79,61.98h0c0-8.68,0-13.02-.51-16.66-3.27-23.26-21.55-41.54-44.8-44.8-3.64-.51-7.98-.51-16.66-.51H84.21c-29.48,0-44.22,0-55.47,5.74-9.9,5.05-17.96,13.1-23,23C0,40,0,54.73,0,84.21v147.37c0,29.48,0,44.22,5.74,55.47,5.05,9.9,13.1,17.96,23,23,11.26,5.74,26,5.74,55.47,5.74h147.37c29.48,0,44.22,0,55.47-5.74,9.9-5.05,17.96-13.1,23-23,5.74-11.26,5.74-26,5.74-55.47v-20.46c0-29.48,0-44.22-5.74-55.47-5.05-9.9-13.1-17.96-23-23-11.26-5.74-26-5.74-55.47-5.74h-75.02l25.69,30.99-25.67,30.98h71.13c9.83,0,14.74,0,18.49,1.91,3.3,1.68,5.99,4.37,7.67,7.67,1.91,3.75,1.91,8.67,1.91,18.49v8.79c0,9.83,0,14.74-1.91,18.49-1.68,3.3-4.37,5.99-7.67,7.67-3.75,1.91-8.67,1.91-18.49,1.91H88.08c-9.83,0-14.74,0-18.49-1.91-3.3-1.68-5.99-4.37-7.67-7.67-1.91-3.75-1.91-8.67-1.91-18.49v-9.05c0-3.97,0-5.95.4-7.84.35-1.68.94-3.3,1.74-4.82.9-1.71,2.17-3.24,4.71-6.28l33.42-40.2-33.42-40.21c-2.53-3.05-3.8-4.57-4.7-6.28-.8-1.52-1.39-3.14-1.74-4.82-.4-1.89-.4-3.87-.4-7.84v-8.36c0-9.83,0-14.74,1.91-18.49,1.68-3.3,4.37-5.99,7.67-7.67,3.75-1.91,8.67-1.91,18.49-1.91h227.71Z";
+const CENTER = 157.895;
+const INTERVAL_MS = 1000;
+let angle = 0;
+
+function buildSvg(rot: number): string {
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 315.79 315.79">' +
+        '<style>.bg{fill:#fff;stroke:#fff}.fg{fill:#010101}@media (prefers-color-scheme: dark){.bg{fill:#010101;stroke:#010101}.fg{fill:#fff}}</style>' +
+        '<rect class="bg" width="315.79" height="315.79" rx="62" ry="62" stroke-width="72"/>' +
+        '<g transform="translate(40 40) scale(0.747)">' +
+        '<g transform="rotate(' + rot + " " + CENTER + " " + CENTER + ')">' +
+        '<path class="fg" d="' + PATH_D + '"/>' +
+        "</g></g></svg>"
+    );
+}
+
+function tick(): void {
+    const svg = buildSvg(angle);
+    const dataUri = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+
+    document.querySelectorAll('link[rel~="icon"]').forEach((el) => {
+        el.parentNode?.removeChild(el);
+    });
+
+    const link = document.createElement("link");
+    link.rel = "icon";
+    link.type = "image/svg+xml";
+    link.href = dataUri;
+    document.head.appendChild(link);
+
+    angle = (angle + 90) % 360;
+}
+
+tick();
+setInterval(tick, INTERVAL_MS);
