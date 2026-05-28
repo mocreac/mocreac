@@ -8,6 +8,8 @@ const root = fileURLToPath(new URL(".", import.meta.url));
 // entry, mirroring the existing site structure so URLs stay stable:
 //   /                  → index.html
 //   /brief/            → brief/index.html
+//   /product-brief/    → product-brief/index.html
+//   /curations/        → curations/index.html
 //   /privacy-policy/   → privacy-policy/index.html
 export default defineConfig({
     appType: "mpa",
@@ -18,6 +20,8 @@ export default defineConfig({
             input: {
                 main: resolve(root, "index.html"),
                 brief: resolve(root, "brief/index.html"),
+                productBrief: resolve(root, "product-brief/index.html"),
+                curations: resolve(root, "curations/index.html"),
                 privacy: resolve(root, "privacy-policy/index.html"),
             },
         },

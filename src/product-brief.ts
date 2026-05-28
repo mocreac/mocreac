@@ -1,9 +1,11 @@
-// Multi-step Brand Identity Brief form. Mirrors the original inline script
-// in brief/index.html, just typed and split out for Vite to bundle.
+// Multi-step Product Design Brief form. Mirrors src/brief.ts (brand identity
+// brief) — same step machine, validation, autosave, and submit flow — with a
+// different chip vocabulary ("what needs designing" instead of brand
+// associations) and its own storage key so the two briefs don't share drafts.
+// Unlike brief.ts, submitting here does not persist a "submitted" flag —
+// refreshing the page after success returns to a fresh form so the user can
+// send another brief without a manual reset button.
 
-// Favicon spin runs as a side-effect import — Vite collapses multiple
-// <script type="module"> entries in one HTML into a single page bundle,
-// so we pull this in here rather than tagging it separately in the HTML.
 import "./favicon-spin.ts";
 import "./email-popover.ts";
 import { paintOnlineStatus } from "./online-status.ts";
@@ -11,13 +13,11 @@ import confetti from "canvas-confetti";
 
 // ─────────────────────────────────────────────────────────
 // Configuration
-const STORAGE_KEY = "mocreac:brief:v1";
-const SUBMITTED_KEY = "mocreac:brief:submitted:v1";
-const ASSOCIATIONS: readonly string[] = [
-    "Approachability", "Authenticity", "Boldness", "Calm", "Clarity", "Confidence", "Craft", "Creativity",
-    "Elegance", "Energy", "Heritage", "Innovation", "Intelligence", "Luxury", "Minimalism", "Modernity",
-    "Optimism", "Playfulness", "Power", "Precision", "Quality", "Simplicity", "Sophistication", "Sustainability",
-    "Trust", "Warmth", "Wisdom", "Wit",
+const STORAGE_KEY = "mocreac:product-brief:v1";
+const DELIVERABLES: readonly string[] = [
+    "Product flow", "Design system", "Mobile app", "Web app", "Dashboard", "Marketing site",
+    "Landing page", "Onboarding", "Pricing page", "New feature", "Redesign", "Audit / review",
+    "Email design", "Pitch deck", "Icons / illustration", "Microcopy",
 ];
 
 // ─────────────────────────────────────────────────────────
@@ -38,42 +38,42 @@ const homeLink = document.getElementById("home-link") as HTMLAnchorElement;
 const errorToast = document.getElementById("error-toast") as HTMLDivElement;
 const successScreen = document.getElementById("success") as HTMLElement;
 const stepNav = document.querySelector<HTMLElement>(".step-nav");
-const btnReset = document.getElementById("btn-reset") as HTMLButtonElement | null;
 
 // ─────────────────────────────────────────────────────────
-// Associations chips
-const assocGrid = document.getElementById("associations-grid") as HTMLElement;
-const assocInput = document.getElementById("f-associations") as HTMLInputElement;
-const selectedAssoc = new Set<string>();
+// Deliverables chips
+const delivGrid = document.getElementById("deliverables-grid") as HTMLElement;
+const delivInput = document.getElementById("f-deliverables") as HTMLInputElement;
+const selectedDeliv = new Set<string>();
 
-ASSOCIATIONS.forEach((word) => {
+DELIVERABLES.forEach((word) => {
     const chip = document.createElement("button");
     chip.type = "button";
     chip.className = "chip";
     chip.textContent = word;
     chip.setAttribute("aria-pressed", "false");
     chip.addEventListener("click", () => {
-        if (selectedAssoc.has(word)) {
-            selectedAssoc.delete(word);
+        if (selectedDeliv.has(word)) {
+            selectedDeliv.delete(word);
             chip.classList.remove("is-selected");
             chip.setAttribute("aria-pressed", "false");
         } else {
-            selectedAssoc.add(word);
+            selectedDeliv.add(word);
             chip.classList.add("is-selected");
             chip.setAttribute("aria-pressed", "true");
         }
-        updateAssoc();
+        if (selectedDeliv.size > 0) chip.closest<HTMLElement>(".field")?.classList.remove("has-error");
+        updateDeliv();
         saveDraft();
     });
-    assocGrid.appendChild(chip);
+    delivGrid.appendChild(chip);
 });
 
-function updateAssoc(): void {
-    assocInput.value = Array.from(selectedAssoc).join(", ");
+function updateDeliv(): void {
+    delivInput.value = Array.from(selectedDeliv).join(", ");
 }
 
 // ─────────────────────────────────────────────────────────
-// Radio option cards (Yes / No)
+// Radio option cards (budget brackets)
 document.querySelectorAll<HTMLLabelElement>(".option-card").forEach((card) => {
     const input = card.querySelector<HTMLInputElement>("input");
     if (!input) return;
@@ -84,6 +84,7 @@ document.querySelectorAll<HTMLLabelElement>(".option-card").forEach((card) => {
         }
         card.classList.add("is-selected");
         input.checked = true;
+        card.closest<HTMLElement>(".field")?.classList.remove("has-error");
         saveDraft();
     });
 });
@@ -135,7 +136,7 @@ function validateStep(n: number): boolean {
             const checked = f.querySelector<HTMLInputElement>("input[type=radio]:checked");
             valid = !!checked;
         } else if (f.dataset.chips !== undefined) {
-            valid = selectedAssoc.size > 0;
+            valid = selectedDeliv.size > 0;
         } else {
             const input = f.querySelector<HTMLInputElement | HTMLTextAreaElement>(".input, .textarea");
             valid = !!input && input.value.trim().length > 0;
@@ -160,10 +161,7 @@ btnNext.addEventListener("click", () => {
 btnBack.addEventListener("click", () => goToStep(currentStep - 1));
 
 // ─────────────────────────────────────────────────────────
-// Keyboard navigation
-// - Enter:           advance (next or submit). In textarea: inserts newline.
-// - Cmd/Ctrl+Enter:  advance from anywhere (including textareas).
-// - Arrow Left/Right: back / advance, only when not inside a text field.
+// Keyboard navigation — see src/brief.ts for the full rationale.
 function attemptAdvance(): void {
     if (currentStep === TOTAL_STEPS) {
         if (!btnSubmit.disabled) btnSubmit.click();
@@ -226,7 +224,7 @@ function saveDraft(): void {
     form.querySelectorAll<HTMLInputElement>("input[type=radio]:checked").forEach((el) => {
         data[el.name] = el.value;
     });
-    data["__assoc"] = Array.from(selectedAssoc);
+    data["__deliv"] = Array.from(selectedDeliv);
     data["__step"] = currentStep;
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -253,18 +251,18 @@ function loadDraft(): void {
                 if (card) card.classList.add("is-selected");
             }
         });
-        const assocList = data["__assoc"];
-        if (Array.isArray(assocList)) {
-            assocList.forEach((w) => {
-                if (typeof w === "string") selectedAssoc.add(w);
+        const delivList = data["__deliv"];
+        if (Array.isArray(delivList)) {
+            delivList.forEach((w) => {
+                if (typeof w === "string") selectedDeliv.add(w);
             });
             document.querySelectorAll<HTMLElement>(".chip").forEach((c) => {
-                if (c.textContent && selectedAssoc.has(c.textContent)) {
+                if (c.textContent && selectedDeliv.has(c.textContent)) {
                     c.classList.add("is-selected");
                     c.setAttribute("aria-pressed", "true");
                 }
             });
-            updateAssoc();
+            updateDeliv();
         }
         // __step intentionally not restored. Always start at 1.
     } catch {
@@ -285,24 +283,8 @@ document.querySelectorAll<HTMLTextAreaElement>(".textarea").forEach((t) => {
 });
 
 // ─────────────────────────────────────────────────────────
-// Persisted success state — once submitted, the form stays "submitted"
-// across reloads instead of resetting back to step 1.
-function wasSubmitted(): boolean {
-    try {
-        return localStorage.getItem(SUBMITTED_KEY) === "1";
-    } catch {
-        return false;
-    }
-}
-
-function markAsSubmitted(): void {
-    try {
-        localStorage.setItem(SUBMITTED_KEY, "1");
-    } catch {
-        /* ignore */
-    }
-}
-
+// Success state — not persisted across refreshes. Reloading after submit
+// returns the user to a fresh form so they can send another brief.
 function showSuccessState(opts: { celebrate?: boolean } = {}): void {
     form.style.display = "none";
     if (stepNav) stepNav.style.display = "none";
@@ -314,48 +296,6 @@ function showSuccessState(opts: { celebrate?: boolean } = {}): void {
     });
     if (opts.celebrate) fireConfetti();
 }
-
-function resetForm(): void {
-    try {
-        localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(SUBMITTED_KEY);
-    } catch {
-        /* ignore */
-    }
-
-    form.reset();
-
-    selectedAssoc.clear();
-    document.querySelectorAll<HTMLElement>(".chip.is-selected").forEach((c) => {
-        c.classList.remove("is-selected");
-        c.setAttribute("aria-pressed", "false");
-    });
-    updateAssoc();
-
-    document.querySelectorAll<HTMLElement>(".option-card.is-selected").forEach((c) => {
-        c.classList.remove("is-selected");
-    });
-
-    document.querySelectorAll<HTMLElement>(".field.has-error").forEach((f) => {
-        f.classList.remove("has-error");
-    });
-    errorToast.style.display = "none";
-
-    btnSubmit.disabled = false;
-    submitLabel.textContent = "Send";
-
-    successScreen.style.display = "none";
-    form.style.display = "";
-    if (stepNav) stepNav.style.display = "";
-
-    goToStep(1, { silent: true });
-    document.querySelectorAll<HTMLTextAreaElement>(".textarea").forEach((t) => {
-        requestAnimationFrame(() => autoresize(t));
-    });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-btnReset?.addEventListener("click", resetForm);
 
 // ─────────────────────────────────────────────────────────
 // Reward burst on successful submit
@@ -391,12 +331,12 @@ form.addEventListener("submit", async (e) => {
     submitLabel.textContent = "Sending…";
 
     const nameEl = document.getElementById("f-name") as HTMLInputElement;
-    const brandEl = document.getElementById("f-brand") as HTMLInputElement;
+    const productEl = document.getElementById("f-product") as HTMLInputElement;
     const subjectEl = document.getElementById("email-subject") as HTMLInputElement;
     const fromEl = document.getElementById("email-from") as HTMLInputElement;
     const name = nameEl.value.trim();
-    const brand = brandEl.value.trim();
-    const subject = brand ? `New brief · ${brand}` : "New brief · mocreac.com";
+    const product = productEl.value.trim();
+    const subject = product ? `New product brief · ${product}` : "New product brief · mocreac.com";
     subjectEl.value = subject;
     if (name) fromEl.value = name;
 
@@ -415,11 +355,10 @@ form.addEventListener("submit", async (e) => {
             } catch {
                 /* ignore */
             }
-            markAsSubmitted();
             showSuccessState({ celebrate: true });
             window.scrollTo({ top: 0, behavior: "smooth" });
             const gtag = (window as unknown as { gtag?: GtagFn }).gtag;
-            if (gtag) gtag("event", "brief_submitted", { event_category: "form" });
+            if (gtag) gtag("event", "product_brief_submitted", { event_category: "form" });
         } else {
             throw new Error(json.message || "Submission failed");
         }
@@ -433,9 +372,3 @@ form.addEventListener("submit", async (e) => {
 
 // Initialise step UI
 goToStep(1, { silent: true });
-
-// If the user has already submitted in a prior session, restore the success
-// state immediately — don't make them refill the form.
-if (wasSubmitted()) {
-    showSuccessState({ celebrate: false });
-}

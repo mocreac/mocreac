@@ -11,7 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300..600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300..600&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
         <meta
             name="description"
             content="George Mocreac, Product & Brand Designer. Design partner for product-led founders."
@@ -62,9 +62,6 @@
                 --sand-800: #272727;
                 --sand-900: #1A1A1A;
                 --sand-950: #0B0B0B;
-
-                /* Subtle 14px grid, sand-950 at 2% — tile is 28×28 */
-                --pattern-dots: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28' fill='none'><g stroke='%230B0B0B' opacity='0.02'><path d='M28 13.5H0'/><path d='M28 27.5H0'/><path d='M13.5 0V28'/><path d='M27.5 0V28'/></g></svg>");
             }
 
             html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -84,6 +81,13 @@
                 width: 100%;
                 max-width: 960px;
                 align-items: start;
+                /* Reserve the hover-state card height so the row's height
+                   stays constant when any card expands — keeps <main>'s
+                   justify-center from re-balancing and shifting the page
+                   up when the Agimut card (with its tall agimut-stage) is
+                   hovered. 360px = padding(36) + agimut-stage min(170) +
+                   title(~34) + card-expanded(120). */
+                min-height: 360px;
             }
             @media (min-width: 768px) {
                 .cards-row { grid-template-columns: repeat(4, 1fr); }
@@ -140,33 +144,673 @@
                 padding: 2px 4px 0 4px;
             }
 
+            /* Card CTAs follow the .pill.pill-secondary look (sand-200 bg,
+               sand-300 hover, subtle lift) so every action on the page reads
+               from the same family — including the Telegram pill above. */
             .card-cta {
                 display: inline-flex;
                 align-items: center;
                 margin-top: 12px;
                 padding: 6px 14px;
                 border-radius: 999px;
-                background: white;
-                border: 1px solid var(--sand-300);
+                background: var(--sand-200);
                 font-size: 12.5px;
                 font-weight: 500;
                 color: rgb(17 24 39);
-                box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+                transition:
+                    background-color 220ms ease,
+                    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+            }
+            .card-cta:hover {
+                background: var(--sand-300);
+                transform: translateY(-1px);
             }
 
-            /* Subtle dotted texture, only on sand-200-or-darker surfaces */
-            .card::before {
-                content: '';
+            /* Multi-CTA row (used by the Agimut card) */
+            .card-cta-row {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                margin-top: 12px;
+            }
+            .card-cta-row .card-cta { margin-top: 0; }
+            /* Icon-only variant — same secondary-pill colors as the base
+               .card-cta, just squared off into a 32×32 footprint. */
+            .card-cta-icon {
+                padding: 0;
+                width: 32px;
+                height: 32px;
+                justify-content: center;
+            }
+            .card-cta-icon svg { display: block; }
+
+            /* Agimut toolbar — full extension UI, dropped in verbatim so it stays
+               in sync with the live product. Scoped scale below shrinks it into
+               the card-visual; pointer-events:none keeps the card hover intact. */
+            .agimut-toolbar {
+                --pp-accent: #e85102;
+                --pp-bg: rgba(26, 24, 22, 0.76);
+                --pp-bg-soft: rgba(255, 255, 255, 0.05);
+                --pp-text: #f6f2ec;
+                --pp-text-dim: #ada69c;
+                --pp-border: rgba(255, 255, 255, 0.1);
+                --pp-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+                --pp-radius-outer: 18px;
+                --pp-radius-inner: 10px;
+                --pp-shell-pad: 6px;
+                --pp-button-size: 38px;
+
+                display: inline-flex;
+                align-items: center;
+                gap: 2px;
+                padding: var(--pp-shell-pad);
+                border: 1px solid var(--pp-border);
+                border-radius: var(--pp-radius-outer);
+                background: var(--pp-bg);
+                box-shadow: var(--pp-shadow);
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+                font-family: "Geist", "Segoe UI", sans-serif;
+                color: var(--pp-text-dim);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            .agimut-toolbar[data-theme="light"] {
+                --pp-bg: rgba(247, 242, 235, 0.8);
+                --pp-bg-soft: rgba(24, 18, 14, 0.04);
+                --pp-text: #1a1613;
+                --pp-text-dim: #72695f;
+                --pp-border: rgba(24, 22, 20, 0.1);
+                --pp-shadow: 0 16px 34px rgba(79, 57, 33, 0.12);
+            }
+            .agimut-toolbar__btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: var(--pp-button-size);
+                height: var(--pp-button-size);
+                flex-shrink: 0;
+                border: 0;
+                border-radius: var(--pp-radius-inner);
+                background: transparent;
+                color: var(--pp-text-dim);
+            }
+            .agimut-toolbar__btn.is-active {
+                background: var(--pp-accent);
+                color: #fff;
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+            }
+            .agimut-toolbar__sep {
+                width: 1px;
+                height: 18px;
+                margin: 0 2px;
+                background: var(--pp-border);
+                flex-shrink: 0;
+            }
+            .agimut-toolbar__count {
+                min-width: 18px;
+                padding: 0 4px;
+                border-radius: 10px;
+                color: var(--pp-text);
+                font-family: inherit;
+                font-size: 11px;
+                font-weight: 700;
+                line-height: var(--pp-button-size);
+                text-align: center;
+                font-variant-numeric: tabular-nums;
+            }
+            .agimut-toolbar svg {
+                width: 18px;
+                height: 18px;
+                fill: currentColor;
+            }
+            /* ───── Agimut stage: animated demo of the comment → export loop.
+               10.4s pure-CSS storyboard, ease-in-out throughout, with blur
+               as the connective tissue between phases. The action lives at
+               the TOP of the card; the logo morphs into the toolbar and
+               docks at the BOTTOM (like a floating action bar). A target
+               element sits in the upper half with the extension's
+               selection ring (dashed orange + faint tint); the popup
+               floats above as "Tighten spacing" types in. The annotation
+               commits as an orange "1" badge pinned to the target's top-
+               right. On Copy, the toolbar blurs away — the badge itself
+               detaches, glides visibly down across the stage into the
+               terminal that has slid in centered, and poofs (blur fade)
+               into the structured prompt. The terminal holds open ~700ms
+               longer than the first pass so the export can be read. */
+            .card-visual:has(.agimut-stage) { justify-content: center; align-items: center; }
+            .agimut-stage {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                min-height: 170px;
+                pointer-events: none;
+            }
+            .agimut-stage > * { position: absolute; }
+
+            /* — Unified shell: the same element is both the closed logo and
+               the open toolbar. Starts dead-center as a 50×50 dark square,
+               then expands AND glides DOWN to dock at the bottom of the
+               page (top: 86%), like a floating action bar — the comment
+               action lives at the top, where the target sits. After Copy
+               is pressed it blurs away; the action transfers to the badge. */
+            .agimut-stage .agimut-toolbar {
+                top: 50%;
+                left: 50%;
+                z-index: 5;
+                box-sizing: border-box;
+                overflow: hidden;
+                width: 50px;
+                height: 50px;
+                background: #2a2624;
+                border-color: rgba(255, 255, 255, 0.08);
+                box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                transform-origin: center center;
+                animation: agimut-stage-bar 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            @keyframes agimut-stage-bar {
+                /* Closed logo — dead-center 50×50 rounded square */
+                0%, 6% {
+                    top: 50%;
+                    width: 50px; height: 50px; border-radius: 14px;
+                    opacity: 1; filter: blur(0);
+                    transform: translate(-50%, -50%) scale(0.7);
+                }
+                /* Morph: expand to full toolbar AND glide DOWN to dock at
+                   the bottom, like a floating action bar */
+                16%, 54% {
+                    top: 86%;
+                    width: 290px; height: 50px; border-radius: 18px;
+                    opacity: 1; filter: blur(0);
+                    transform: translate(-50%, -50%) scale(0.7);
+                }
+                /* Copy is pressed at ~54% → toolbar blurs out, handing
+                   the action off to the badge that detaches right after */
+                60%, 100% {
+                    top: 86%;
+                    width: 290px; height: 50px; border-radius: 18px;
+                    opacity: 0; filter: blur(6px);
+                    transform: translate(-50%, -50%) scale(0.7);
+                }
+            }
+
+            /* The √ logo mark sits over the toolbar's left button slot and
+               fades out as the chrome expands. Solid dark fill matches the
+               toolbar so the orange Comment chip is hidden until the
+               cross-fade. */
+            .agimut-stage__mark {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #2a2624;
+                color: #fff;
+                pointer-events: none;
+                z-index: 2;
+                animation: agimut-stage-mark 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            /* Restore outlined-stroke look (overrides .agimut-toolbar svg's
+               fill: currentColor). */
+            .agimut-stage__mark svg {
+                width: 26px;
+                height: 20px;
+                overflow: visible;
+                fill: none;
+            }
+            @keyframes agimut-stage-mark {
+                0%, 6% { opacity: 1; filter: blur(0); }
+                12%, 100% { opacity: 0; filter: blur(4px); }
+            }
+
+            /* Comment chip is active by default — orange the moment the
+               toolbar opens. */
+            .agimut-stage__comment {
+                background: var(--pp-accent);
+                color: #fff;
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+                    inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+            }
+
+            /* Count badge — visible alongside the on-target annotation. The
+               toolbar blurs away before this collapses, so no need to fold
+               it back. */
+            .agimut-stage .agimut-toolbar__count {
+                min-width: 0;
+                padding: 0;
+                overflow: hidden;
+                opacity: 0;
+                animation: agimut-stage-count 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            @keyframes agimut-stage-count {
+                0%, 40% { min-width: 0; padding: 0; opacity: 0; transform: scale(0.4); }
+                44%    { min-width: 18px; padding: 0 4px; opacity: 1; transform: scale(1.4); }
+                48%, 100% { min-width: 18px; padding: 0 4px; opacity: 1; transform: scale(1); }
+            }
+
+            /* Copy chip flashes orange on press — the toolbar blurs out
+               right after, so it never returns to neutral. */
+            .agimut-stage__copy {
+                animation: agimut-stage-copy 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            @keyframes agimut-stage-copy {
+                0%, 48% { background: transparent; color: #ada69c; box-shadow: none; transform: scale(1); }
+                51% { transform: scale(0.88); background: transparent; color: #ada69c; box-shadow: none; }
+                54%, 100% {
+                    background: #e85102;
+                    color: #fff;
+                    transform: scale(1);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+                }
+            }
+
+            /* — Target element: the bit of UI being commented on. Sits in
+               the UPPER half of the stage (translateY pushes it 34px above
+               center) so the action is on top and the toolbar at bottom
+               doesn't conflict with it. Dashed orange ring + faint orange
+               tint mirror the extension's selected-element overlay. Two
+               skeleton lines stand in for whatever the user actually
+               clicked. */
+            .agimut-stage__target {
+                top: 50%;
+                left: 50%;
+                z-index: 1;
+                width: 110px;
+                height: 32px;
+                background: rgba(232, 81, 2, 0.07);
+                border: 1px dashed rgba(232, 81, 2, 0.7);
+                border-radius: 6px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 5px;
+                padding: 0 10px;
+                opacity: 0;
+                transform: translate(-50%, calc(-50% - 34px)) scale(0.96);
+                filter: blur(4px);
+                animation: agimut-stage-target 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            .agimut-stage__target-line {
+                height: 3px;
+                border-radius: 2px;
+                background: rgba(11, 11, 11, 0.18);
+            }
+            .agimut-stage__target-line:nth-child(1) { width: 68%; }
+            .agimut-stage__target-line:nth-child(2) { width: 42%; }
+            @keyframes agimut-stage-target {
+                0%, 10% { opacity: 0; filter: blur(4px); transform: translate(-50%, calc(-50% - 34px)) scale(0.96); }
+                20%, 58% { opacity: 1; filter: blur(0); transform: translate(-50%, calc(-50% - 34px)) scale(1); }
+                66%, 100% { opacity: 0; filter: blur(5px); transform: translate(-50%, calc(-50% - 34px)) scale(0.98); }
+            }
+
+            /* — Annotation badge: small orange "1" rounded square. Anchors
+               to the target's top-right corner (target center is 34px above
+               stage center, half-width 55px, half-height 16px → badge sits
+               52px right and 46px above stage center). On Copy it detaches
+               and travels visibly DOWN across the stage into the centered
+               terminal, poofing on arrival. Independent from the target so
+               it can outlive it. */
+            .agimut-stage__badge {
+                top: 50%;
+                left: 50%;
+                z-index: 6;
+                width: 15px;
+                height: 15px;
+                border-radius: 4px;
+                background: #e85102;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Geist", sans-serif;
+                font-size: 9.5px;
+                font-weight: 600;
+                line-height: 1;
+                box-shadow:
+                    0 2px 5px rgba(11, 11, 11, 0.28),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                    inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+                opacity: 0;
+                transform: translate(calc(-50% + 52px), calc(-50% - 46px)) scale(0.5);
+                filter: blur(3px);
+                animation: agimut-stage-badge 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            @keyframes agimut-stage-badge {
+                /* Hidden through morph + commenting */
+                0%, 40% {
+                    opacity: 0; filter: blur(3px);
+                    transform: translate(calc(-50% + 52px), calc(-50% - 46px)) scale(0.5);
+                }
+                /* Pop in on target corner — the annotation has been saved */
+                46% {
+                    opacity: 1; filter: blur(0);
+                    transform: translate(calc(-50% + 52px), calc(-50% - 46px)) scale(1.2);
+                }
+                /* Settle on the corner — holds through the Copy press */
+                50%, 60% {
+                    opacity: 1; filter: blur(0);
+                    transform: translate(calc(-50% + 52px), calc(-50% - 46px)) scale(1);
+                }
+                /* Detach as the toolbar finishes blurring away — tiny lift
+                   before falling, so the descent doesn't snap into motion */
+                64% {
+                    opacity: 1; filter: blur(0);
+                    transform: translate(calc(-50% + 48px), calc(-50% - 52px)) scale(1.05);
+                }
+                /* Drag VISIBLY down through the stage toward the terminal
+                   sliding into center */
+                72% {
+                    opacity: 1; filter: blur(0.5px);
+                    transform: translate(calc(-50% + 12px), calc(-50% - 16px)) scale(0.94);
+                }
+                /* Arrive at the terminal's prompt area (left-of-center, just
+                   below its banner — where the "1." line will appear) */
+                80% {
+                    opacity: 1; filter: blur(0);
+                    transform: translate(calc(-50% - 52px), calc(-50% + 12px)) scale(0.78);
+                }
+                /* Poof — dissolves into the terminal as a prompt */
+                86%, 100% {
+                    opacity: 0; filter: blur(8px);
+                    transform: translate(calc(-50% - 52px), calc(-50% + 12px)) scale(0.4);
+                }
+            }
+
+            /* — Comment popup sits BELOW the target, types its text in.
+               Anchored to stage center; target center is 34px above stage
+               center (bottom edge ~18px above stage center), so a positive
+               translateY drops the popup just below the target. Fades out
+               downward in sync with the toolbar at ~54-60%. */
+            .agimut-stage__popup {
+                top: 50%;
+                left: 50%;
+                z-index: 3;
+                background: rgba(26, 24, 22, 0.92);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                padding: 4px 8px;
+                color: #f6f2ec;
+                font-family: "Geist", sans-serif;
+                font-size: 10px;
+                font-weight: 500;
+                line-height: 1.4;
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+                white-space: nowrap;
+                overflow: hidden;
+                opacity: 0;
+                animation: agimut-stage-popup 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            .agimut-stage__popup-text {
+                display: inline-block;
+                overflow: hidden;
+                width: 0;
+                white-space: nowrap;
+                vertical-align: bottom;
+                animation: agimut-stage-type 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            /* Static caret that rides the right edge of the typing text —
+               sits as the next inline-block sibling, so it shifts right as
+               popup-text's width grows during the type animation. */
+            .agimut-stage__popup-cursor {
+                display: inline-block;
+                width: 1px;
+                height: 10px;
+                margin-left: 1px;
+                background: currentColor;
+                vertical-align: middle;
+            }
+            @keyframes agimut-stage-popup {
+                /* Slides up into view from just below the target */
+                0%, 22% { opacity: 0; filter: blur(3px); transform: translate(-50%, calc(-50% + 14px)) scale(0.94); }
+                /* Settles just below target — holds while toolbar is active */
+                28%, 54% { opacity: 1; filter: blur(0); transform: translate(-50%, calc(-50% + 8px)) scale(1); }
+                /* Toolbar blurs away at 54–60%; popup sinks downward and out alongside it */
+                60%, 100% { opacity: 0; filter: blur(4px); transform: translate(-50%, calc(-50% + 18px)) scale(0.96); }
+            }
+            /* Typed-out width matches "Tighten spacing" at 10px Geist almost
+               exactly — any wider and the popup reads as having empty right
+               padding once typing finishes. */
+            @keyframes agimut-stage-type {
+                0%, 28% { width: 0; }
+                42%, 100% { width: 72px; }
+            }
+
+            /* — Terminal slides up centered after the toolbar blurs away.
+               Lives where the target used to be — same dead-center anchor.
+               The badge lands on it just as its content begins streaming.
+               Base styles describe the LOGO state (50×50 dark square), since
+               the loop wrap re-enters there: terminal morphs back into the
+               logo shape so it lines up under the toolbar's 0% state. */
+            .agimut-stage__terminal {
+                top: 50%;
+                left: 50%;
+                z-index: 2;
+                box-sizing: border-box;
+                width: 50px;
+                height: 50px;
+                background: #2a2624;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+                overflow: hidden;
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.7);
+                animation: agimut-stage-terminal 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            /* √ mark inside the terminal — only visible at the loop boundary
+               (0–6% and 100%), so the wrap from "terminal-shaped-as-logo" to
+               "toolbar-shaped-as-logo" lands on an identical √ frame. */
+            .agimut-stage__terminal-mark {
                 position: absolute;
                 inset: 0;
-                background-image: var(--pattern-dots);
-                background-repeat: repeat;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
                 pointer-events: none;
-                transition: opacity 520ms cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 0;
+                z-index: 4;
+                opacity: 0;
+                animation: agimut-stage-terminal-mark 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
             }
-            .card > * { position: relative; z-index: 1; }
-            .card:hover::before { opacity: 0; }
+            .agimut-stage__terminal-mark svg {
+                width: 26px;
+                height: 20px;
+                overflow: visible;
+                fill: none;
+            }
+            @keyframes agimut-stage-terminal-mark {
+                0%, 6% { opacity: 1; }
+                10%, 94% { opacity: 0; }
+                100% { opacity: 1; }
+            }
+            .agimut-stage__terminal-bar {
+                background: #181818;
+                padding: 4px 6px;
+                display: flex;
+                gap: 4px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            }
+            .agimut-stage__terminal-bar > span {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: #3f3f3f;
+            }
+            /* Code-agent welcome banner inside the terminal — mirrors the
+               framed "✻ Welcome to Claude Code" line you see when booting
+               a coding agent, so the viewer knows where this paste lands. */
+            .agimut-stage__terminal-banner {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                margin: 5px 8px 0;
+                padding: 2px 5px 3px;
+                border: 1px solid rgba(232, 81, 2, 0.55);
+                border-radius: 2px;
+                font-family: ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 7px;
+                line-height: 1;
+                color: #e8e8e8;
+                letter-spacing: 0.04em;
+            }
+            .agimut-stage__terminal-banner-mark {
+                color: #e85102;
+                font-weight: 700;
+            }
+            .agimut-stage__terminal-body {
+                position: relative;
+                padding: 4px 8px 14px;
+                font-family: ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 7.5px;
+                color: #d4d4d4;
+                line-height: 1.6;
+                margin: 0;
+                white-space: pre;
+            }
+            /* Divider rule used twice — once between the agent banner and
+               the prompt content, again between the prompt and the loader.
+               Full-width: zero horizontal margin so the underscores extend
+               edge-to-edge inside the terminal (excess gets clipped by the
+               terminal's overflow:hidden). */
+            .agimut-stage__terminal-sep {
+                margin: 3px 0 1px;
+                font-family: ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 7.5px;
+                line-height: 1;
+                color: #525252;
+                letter-spacing: 0;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+            /* "Combobulating..." loader — appears after the second divider
+               with a Braille-dots spinner. Orange so it reads as agent-active
+               work. Has its own opacity timeline so it surfaces just after
+               the prompt lines have finished populating. */
+            .agimut-stage__terminal-loader {
+                display: block;
+                margin: 0;
+                padding: 1px 8px 8px;
+                font-family: ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 7.5px;
+                line-height: 1.6;
+                color: #e85102;
+                opacity: 0;
+                animation: agimut-stage-loader 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            .agimut-stage__terminal-loader::before {
+                content: "⠋";
+                display: inline-block;
+                margin-right: 4px;
+                animation: agimut-stage-spinner 0.9s linear infinite;
+            }
+            @keyframes agimut-stage-spinner {
+                0%   { content: "⠋"; }
+                10%  { content: "⠙"; }
+                20%  { content: "⠹"; }
+                30%  { content: "⠸"; }
+                40%  { content: "⠼"; }
+                50%  { content: "⠴"; }
+                60%  { content: "⠦"; }
+                70%  { content: "⠧"; }
+                80%  { content: "⠇"; }
+                90%  { content: "⠏"; }
+            }
+            @keyframes agimut-stage-loader {
+                0%, 86% { opacity: 0; transform: translateY(2px); }
+                90%, 94% { opacity: 1; transform: translateY(0); }
+                100%    { opacity: 0; transform: translateY(0); }
+            }
+            .agimut-stage__terminal-line {
+                display: block;
+                opacity: 0;
+            }
+            .agimut-stage__terminal-line--feedback { color: #e8a070; }
+            .agimut-stage__terminal-body > :nth-child(1) {
+                animation: agimut-stage-line 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            .agimut-stage__terminal-body > :nth-child(2) {
+                animation: agimut-stage-line 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+                animation-delay: 0.12s;
+            }
+            .agimut-stage__terminal-body > :nth-child(3) {
+                animation: agimut-stage-line 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+                animation-delay: 0.24s;
+            }
+            /* Perfect loop: terminal starts AT logo geometry (covered by the
+               toolbar at z-index 5), hides through the comment action, slides
+               in as a full terminal at 68–94%, then morphs BACK to the logo
+               shape at 100% so the wrap onto the toolbar's 0% state is
+               seamless. Both stages are at top:50%/left:50% with scale(0.7),
+               50×50, border-radius 14px, #2a2624 background — identical. */
+            @keyframes agimut-stage-terminal {
+                0%, 6% {
+                    opacity: 1;
+                    filter: blur(0);
+                    width: 50px; height: 50px;
+                    background: #2a2624;
+                    border-radius: 14px;
+                    transform: translate(-50%, -50%) scale(0.7);
+                }
+                10%, 60% {
+                    opacity: 0;
+                    filter: blur(4px);
+                    width: 50px; height: 50px;
+                    background: #2a2624;
+                    border-radius: 14px;
+                    transform: translate(-50%, -50%) scale(0.7);
+                }
+                68%, 94% {
+                    opacity: 1;
+                    filter: blur(0);
+                    width: 200px; height: 130px;
+                    background: #0b0b0b;
+                    border-radius: 7px;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+                100% {
+                    opacity: 1;
+                    filter: blur(0);
+                    width: 50px; height: 50px;
+                    background: #2a2624;
+                    border-radius: 14px;
+                    transform: translate(-50%, -50%) scale(0.7);
+                }
+            }
+            /* Inner chrome (title bar, banner, body) lives only inside the
+               full terminal phase. Fades out as the terminal collapses into
+               the logo so the small 50×50 footprint stays clean. */
+            .agimut-stage__terminal-bar,
+            .agimut-stage__terminal-banner,
+            .agimut-stage__terminal-sep,
+            .agimut-stage__terminal-body {
+                animation: agimut-stage-terminal-content 10.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            }
+            @keyframes agimut-stage-terminal-content {
+                0%, 64% { opacity: 0; }
+                68%, 94% { opacity: 1; }
+                100% { opacity: 0; }
+            }
+            @keyframes agimut-stage-line {
+                0%, 82% { opacity: 0; transform: translateY(2px); }
+                86%, 94% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(0); }
+            }
+
 
             /* Hover: card lifts, content morphs in */
             @media (hover: hover) {
@@ -215,6 +859,262 @@
             .pill-secondary { background-color: var(--sand-200); color: rgb(17 24 39); }
             .pill-secondary:hover { background-color: var(--sand-300); }
 
+            /* ────────── Email popover ────────── */
+            /* Email pill becomes a trigger; clicking opens a panel below it
+               with deep links to Gmail / Outlook + a Copy action. Panel
+               anchors to the right edge of the trigger so it stays inside
+               the page; transform-origin sits at the same top-right corner
+               so the open animation looks like the panel grows out of the
+               pill. */
+            .email-popover {
+                position: relative;
+                display: inline-flex;
+            }
+            .email-trigger {
+                position: relative;
+                cursor: pointer;
+                border: 0;
+                font-family: inherit;
+            }
+            /* Hover bridge — fills the gap between trigger and panel so the
+               cursor can move down to the options without losing :hover on
+               the parent and snapping the menu shut. Lives on the trigger
+               (not the panel) so it stays hoverable while the panel is
+               still in its closed/invisible state. */
+            .email-trigger::after {
+                content: '';
+                position: absolute;
+                left: -12px;
+                right: -12px;
+                bottom: -14px;
+                height: 14px;
+            }
+            .email-trigger:focus-visible {
+                outline: 2px solid var(--sand-400);
+                outline-offset: 3px;
+            }
+
+            /* Panel — dark surface matching the trigger pill. 42px outer
+               radius for a soft pillow shape; inset white highlight +
+               layered dark shadow give it depth against the light page. */
+            .email-panel {
+                position: absolute;
+                top: calc(100% + 8px);
+                right: 0;
+                z-index: 50;
+                min-width: 248px;
+                padding: 6px;
+                border-radius: 23px;
+                background: #000;
+                box-shadow:
+                    0 1px 2px rgba(0, 0, 0, 0.35),
+                    0 4px 12px rgba(0, 0, 0, 0.25),
+                    0 24px 56px -16px rgba(0, 0, 0, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+                opacity: 0;
+                transform-origin: top right;
+                transform: translateY(-6px) scale(0.96);
+                filter: blur(4px);
+                pointer-events: none;
+                transition:
+                    opacity 220ms cubic-bezier(0.16, 1, 0.3, 1) 180ms,
+                    transform 220ms cubic-bezier(0.16, 1, 0.3, 1) 180ms,
+                    filter 220ms cubic-bezier(0.16, 1, 0.3, 1) 180ms;
+                will-change: opacity, transform, filter;
+            }
+            .email-popover[data-state="open"] .email-panel,
+            .email-popover:hover .email-panel {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+                pointer-events: auto;
+                transition-delay: 0ms;
+            }
+
+            /* Option rows are full-pill (border-radius: 999px) so they
+               echo the trigger pill on the same dark surface. Stagger
+               delays apply to the entering transition only — leaving
+               unstaggers naturally for a soft, simultaneous exit. */
+            .email-option {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                padding: 9px 14px;
+                border: 0;
+                border-radius: 999px;
+                background: transparent;
+                color: rgba(255, 255, 255, 0.92);
+                font-family: inherit;
+                font-size: 13.5px;
+                font-weight: 500;
+                line-height: 1.2;
+                text-align: left;
+                cursor: pointer;
+                opacity: 0;
+                transform: translateY(4px);
+                filter: blur(2px);
+                transition:
+                    opacity 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    filter 260ms cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 180ms ease,
+                    color 180ms ease;
+            }
+            .email-popover[data-state="open"] .email-option,
+            .email-popover:hover .email-option {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+            .email-popover[data-state="open"] .email-option:nth-child(1),
+            .email-popover:hover .email-option:nth-child(1) { transition-delay: 60ms, 60ms, 60ms, 0ms, 0ms; }
+            .email-popover[data-state="open"] .email-option:nth-child(2),
+            .email-popover:hover .email-option:nth-child(2) { transition-delay: 120ms, 120ms, 120ms, 0ms, 0ms; }
+            .email-popover[data-state="open"] .email-option:nth-child(4),
+            .email-popover:hover .email-option:nth-child(4) { transition-delay: 200ms, 200ms, 200ms, 0ms, 0ms; }
+
+            .email-option:hover {
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+            }
+            .email-option:focus-visible {
+                outline: none;
+                background: rgba(255, 255, 255, 0.08);
+                box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.22);
+                color: #fff;
+            }
+            .email-popover[data-state="open"] .email-option:active,
+            .email-popover:hover .email-option:active { transform: scale(0.96); }
+
+            .email-option-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 16px;
+                height: 16px;
+                flex-shrink: 0;
+                color: rgba(255, 255, 255, 0.9);
+            }
+            .email-option:hover .email-option-icon,
+            .email-option:focus-visible .email-option-icon {
+                color: #fff;
+            }
+            .email-option-icon-swap {
+                position: relative;
+                width: 14px;
+                height: 14px;
+            }
+            .email-option-icon-swap svg {
+                position: absolute;
+                inset: 0;
+                transition:
+                    opacity 240ms cubic-bezier(0.2, 0, 0, 1),
+                    transform 240ms cubic-bezier(0.2, 0, 0, 1),
+                    filter 240ms cubic-bezier(0.2, 0, 0, 1);
+            }
+            .email-option-icon-copy { opacity: 1; transform: scale(1); filter: blur(0); }
+            .email-option-icon-check {
+                opacity: 0;
+                transform: scale(0.25);
+                filter: blur(4px);
+                color: #22C55E;
+            }
+            .email-option-copy[data-copied="true"] .email-option-icon-copy {
+                opacity: 0;
+                transform: scale(0.25);
+                filter: blur(4px);
+            }
+            .email-option-copy[data-copied="true"] .email-option-icon-check {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+
+            .email-option-label {
+                flex: 1;
+                min-width: 0;
+            }
+            .email-option-copy .email-option-label {
+                position: relative;
+                display: inline-grid;
+            }
+            .email-option-copy .email-option-label-text,
+            .email-option-copy .email-option-label-copied {
+                grid-area: 1 / 1;
+                transition:
+                    opacity 240ms cubic-bezier(0.2, 0, 0, 1),
+                    transform 240ms cubic-bezier(0.2, 0, 0, 1),
+                    filter 240ms cubic-bezier(0.2, 0, 0, 1);
+                font-variant-numeric: tabular-nums;
+            }
+            .email-option-copy .email-option-label-text {
+                font-family: "Geist", ui-monospace, "SF Mono", Menlo, monospace;
+                font-size: 12.5px;
+                color: var(--sand-300);
+                letter-spacing: -0.005em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .email-option-copy:hover .email-option-label-text {
+                color: #fff;
+            }
+            .email-option-copy .email-option-label-copied {
+                color: #22C55E;
+                opacity: 0;
+                transform: translateY(4px);
+                filter: blur(2px);
+                pointer-events: none;
+            }
+            .email-option-copy[data-copied="true"] .email-option-label-text {
+                opacity: 0;
+                transform: translateY(-4px);
+                filter: blur(2px);
+            }
+            .email-option-copy[data-copied="true"] .email-option-label-copied {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+
+            .email-option-arrow {
+                flex-shrink: 0;
+                color: rgba(255, 255, 255, 0.35);
+                opacity: 0;
+                transform: translate(-2px, 2px);
+                transition:
+                    opacity 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                    transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+                    color 200ms ease;
+            }
+            .email-option:hover .email-option-arrow,
+            .email-option:focus-visible .email-option-arrow {
+                opacity: 1;
+                transform: translate(0, 0);
+                color: rgba(255, 255, 255, 0.75);
+            }
+
+            .email-divider {
+                height: 1px;
+                margin: 4px 8px;
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .email-panel,
+                .email-option,
+                .email-option-icon-swap svg,
+                .email-option-arrow,
+                .email-option-copy .email-option-label-text,
+                .email-option-copy .email-option-label-copied {
+                    transition-duration: 0.001ms !important;
+                    animation-duration: 0.001ms !important;
+                    animation-delay: 0ms !important;
+                }
+            }
+
             /* Card-specific visuals */
             .stack-card {
                 position: absolute;
@@ -228,6 +1128,39 @@
                 border-radius: 2px;
                 height: 3px;
             }
+
+            /* ────────── Online status ────────── */
+            .online-status {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--sand-500);
+                line-height: 1;
+                letter-spacing: -0.02em;
+            }
+            .online-status-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 999px;
+                background: var(--sand-400);
+                box-shadow: 0 0 0 3px rgba(163, 163, 163, 0.18);
+                flex-shrink: 0;
+                transition: background 240ms ease, box-shadow 240ms ease;
+            }
+            .online-status[data-status="online"] .online-status-dot {
+                background: #22C55E;
+                box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22);
+                animation: online-pulse 2.4s ease-in-out infinite;
+            }
+            @keyframes online-pulse {
+                0%, 100% { box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22); }
+                50%      { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.06); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .online-status-dot { animation: none !important; }
+            }
         </style>
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 font-sans min-h-screen flex flex-col">
@@ -236,15 +1169,52 @@
                 <div class="flex items-center gap-4">
                     <img src="/logo.svg" alt="George Mocreac" class="shrink-0 w-[2.97rem] h-[2.97rem] sm:w-[3.7125rem] sm:h-[3.7125rem]" />
                     <div>
-                        <h1 class="text-2xl sm:text-3xl font-semibold leading-[1.1]">
+                        <h1 class="text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.06em]">
                             George Mocreac
                         </h1>
-                        <p class="text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.06em] text-[var(--sand-500)]">
-                            Product &amp; Brand Designer.
+                        <p class="text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.06em] text-[#858585]">
+                            Designer.
                         </p>
                     </div>
                     <div class="flex gap-2 ml-auto self-end">
-                        <a href="mailto:mocreacgeorge@gmail.com" class="pill pill-primary">Email</a>
+                        <div class="email-popover" data-state="closed">
+                            <button type="button" class="pill pill-primary email-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="email-panel">Email</button>
+                            <div class="email-panel" id="email-panel" role="menu" aria-label="Choose mail provider">
+                                <a class="email-option" role="menuitem" target="_blank" rel="noopener"
+                                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mocreacgeorge@gmail.com">
+                                    <span class="email-option-icon" aria-hidden="true">
+                                        <!-- Phosphor envelope (Regular) -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"/></svg>
+                                    </span>
+                                    <span class="email-option-label">Gmail</span>
+                                    <svg class="email-option-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg>
+                                </a>
+                                <a class="email-option" role="menuitem" target="_blank" rel="noopener"
+                                   href="https://outlook.live.com/mail/0/deeplink/compose?to=mocreacgeorge@gmail.com">
+                                    <span class="email-option-icon" aria-hidden="true">
+                                        <!-- Phosphor envelope-simple-open (Regular) — open envelope, differs from Gmail's closed envelope -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78ZM40,200V111.53l65.9,47a8,8,0,0,0,4.65,1.49h34.9a8,8,0,0,0,4.65-1.49l65.9-47V200Z"/></svg>
+                                    </span>
+                                    <span class="email-option-label">Outlook</span>
+                                    <svg class="email-option-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg>
+                                </a>
+                                <div class="email-divider" aria-hidden="true"></div>
+                                <button type="button" class="email-option email-option-copy" role="menuitem" data-copy="mocreacgeorge@gmail.com">
+                                    <span class="email-option-icon" aria-hidden="true">
+                                        <span class="email-option-icon-swap">
+                                            <!-- Phosphor copy (Regular) -->
+                                            <svg class="email-option-icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></svg>
+                                            <!-- Phosphor check (Regular) -->
+                                            <svg class="email-option-icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+                                        </span>
+                                    </span>
+                                    <span class="email-option-label">
+                                        <span class="email-option-label-text">mocreacgeorge@gmail.com</span>
+                                        <span class="email-option-label-copied">Copied</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                         <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="pill pill-secondary">Telegram</a>
                     </div>
                 </div>
@@ -252,7 +1222,7 @@
 
             <section class="cards-row">
                 <!-- Need Product Design -->
-                <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="card">
+                <a href="/product-brief/" class="card">
                     <div class="card-visual">
                         <div class="relative w-14 h-20 bg-white border border-[var(--sand-300)] rounded-xl shadow-sm">
                             <div class="phone-line" style="top: 8px; left: 8px; width: 24px;"></div>
@@ -265,7 +1235,7 @@
                     <h3 class="card-title">Need Product Design?</h3>
                     <div class="card-expanded">
                         <p class="card-desc">Web, mobile, or landing. Polished and ready to ship.</p>
-                        <span class="card-cta">Let's build it →</span>
+                        <span class="card-cta">Let's build it</span>
                     </div>
                 </a>
 
@@ -281,26 +1251,118 @@
                     <h3 class="card-title">Need Branding?</h3>
                     <div class="card-expanded">
                         <p class="card-desc">Identities people take seriously.</p>
-                        <span class="card-cta">Start a brief →</span>
+                        <span class="card-cta">What's your vision?</span>
                     </div>
                 </a>
 
                 <!-- Agimut -->
-                <a href="/agimut/" class="card">
+                <div class="card">
                     <div class="card-visual">
-                        <div class="relative w-20 h-20">
-                            <div class="absolute inset-0 bg-white border border-[var(--sand-300)] rounded-2xl flex items-center justify-center">
-                                <div class="w-8 h-1 bg-[var(--sand-400)] rounded-full"></div>
+                        <div class="agimut-stage" role="img" aria-label="Agimut: leave a comment on any UI, export it as structured text">
+                            <!-- Phases 1-2 · the closed logo and the open toolbar are the
+                                 SAME element. The toolbar's width animates from 50px (the
+                                 logo square) to 290px (full bar), and the √ mark sits over
+                                 the left button slot until the chrome expands — at which
+                                 point the Comment chip (already orange / selected) is
+                                 revealed in its place. -->
+                            <div class="agimut-toolbar" data-theme="dark" aria-hidden="true">
+                                <div class="agimut-stage__mark" aria-hidden="true">
+                                    <svg viewBox="83 68 378 289" fill="none" stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M113.279 198.073L225.785 327.192V98.2M225.785 327.192L331.751 122.192H430.911"/>
+                                    </svg>
+                                </div>
+                                <span class="agimut-toolbar__btn agimut-stage__comment">
+                                    <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/></svg>
+                                </span>
+                                <span class="agimut-toolbar__count">1</span>
+                                <span class="agimut-toolbar__sep"></span>
+                                <span class="agimut-toolbar__btn agimut-stage__copy">
+                                    <svg viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></svg>
+                                </span>
+                                <span class="agimut-toolbar__btn">
+                                    <svg viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
+                                </span>
+                                <span class="agimut-toolbar__sep"></span>
+                                <span class="agimut-toolbar__btn">
+                                    <svg viewBox="0 0 256 256"><path d="M235.32,73.37,182.63,20.69a16,16,0,0,0-22.63,0L20.68,160a16,16,0,0,0,0,22.63l52.69,52.68a16,16,0,0,0,22.63,0L235.32,96A16,16,0,0,0,235.32,73.37ZM84.68,224,32,171.31l32-32,26.34,26.35a8,8,0,0,0,11.32-11.32L75.31,128,96,107.31l26.34,26.35a8,8,0,0,0,11.32-11.32L107.31,96,128,75.31l26.34,26.35a8,8,0,0,0,11.32-11.32L139.31,64l32-32L224,84.68Z"/></svg>
+                                </span>
+                                <span class="agimut-toolbar__sep"></span>
+                                <span class="agimut-toolbar__btn">
+                                    <svg viewBox="0 0 256 256"><path d="M64,105V40a8,8,0,0,0-16,0v65a32,32,0,0,0,0,62v49a8,8,0,0,0,16,0V167a32,32,0,0,0,0-62Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,56,152Zm80-95V40a8,8,0,0,0-16,0V57a32,32,0,0,0,0,62v97a8,8,0,0,0,16,0V119a32,32,0,0,0,0-62Zm-8,47a16,16,0,1,1,16-16A16,16,0,0,1,128,104Zm104,64a32.06,32.06,0,0,0-24-31V40a8,8,0,0,0-16,0v97a32,32,0,0,0,0,62v17a8,8,0,0,0,16,0V199A32.06,32.06,0,0,0,232,168Zm-32,16a16,16,0,1,1,16-16A16,16,0,0,1,200,184Z"/></svg>
+                                </span>
+                                <span class="agimut-toolbar__btn">
+                                    <svg viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+                                </span>
                             </div>
-                            <div class="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-white text-[11px] font-semibold shadow-md" style="background-color: #E85102;">1</div>
+
+                            <!-- Phase 3 · target element being commented on, with the
+                                 extension's dashed-orange selection ring + faint tint -->
+                            <div class="agimut-stage__target" aria-hidden="true">
+                                <div class="agimut-stage__target-line"></div>
+                                <div class="agimut-stage__target-line"></div>
+                            </div>
+
+                            <!-- Phase 3b · comment popup typed above the target -->
+                            <div class="agimut-stage__popup" aria-hidden="true">
+                                <span class="agimut-stage__popup-text">Tighten spacing</span><span class="agimut-stage__popup-cursor" aria-hidden="true"></span>
+                            </div>
+
+                            <!-- Phase 4 · annotation badge: pops in on the target's
+                                 top-right corner, then on Copy detaches and glides
+                                 down into the terminal where it poofs into a prompt. -->
+                            <div class="agimut-stage__badge" aria-hidden="true">1</div>
+
+                            <!-- Phase 5 · structured export pasted into a coding-agent
+                                 terminal. The orange-bordered "✻ CODE" banner mirrors
+                                 the framed welcome line a coding agent prints on boot,
+                                 so the viewer can read where the paste lands. -->
+                            <div class="agimut-stage__terminal" aria-hidden="true">
+                                <!-- √ mark — same SVG as the toolbar's logo mark.
+                                     Only visible at the loop boundary (terminal
+                                     morphed to logo shape), so the wrap onto the
+                                     toolbar's 0% state lands on an identical √. -->
+                                <div class="agimut-stage__terminal-mark" aria-hidden="true">
+                                    <svg viewBox="83 68 378 289" fill="none" stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M113.279 198.073L225.785 327.192V98.2M225.785 327.192L331.751 122.192H430.911"/>
+                                    </svg>
+                                </div>
+                                <div class="agimut-stage__terminal-bar">
+                                    <span></span><span></span><span></span>
+                                </div>
+                                <div class="agimut-stage__terminal-banner">
+                                    <span class="agimut-stage__terminal-banner-mark">✻</span>
+                                    <span>CODE</span>
+                                </div>
+                                <!-- Divider rule between the agent banner and
+                                     the prompt content — overrun with extra
+                                     underscores so it clips full-width inside
+                                     the terminal. -->
+                                <div class="agimut-stage__terminal-sep" aria-hidden="true">________________________________________________________________</div>
+                                <pre class="agimut-stage__terminal-body"><span class="agimut-stage__terminal-line">URL: mocreac.com</span><span class="agimut-stage__terminal-line">1.</span><span class="agimut-stage__terminal-line agimut-stage__terminal-line--feedback">   Feedback: Tighten spacing</span></pre>
+                                <!-- Second divider — separates the user prompt
+                                     from the agent loader below. -->
+                                <div class="agimut-stage__terminal-sep" aria-hidden="true">________________________________________________________________</div>
+                                <!-- Combobulating loader — appears after the
+                                     paste lands, runs an orange Braille
+                                     spinner like a typical CLI agent. -->
+                                <div class="agimut-stage__terminal-loader" aria-hidden="true">Combobulating...</div>
+                            </div>
                         </div>
                     </div>
                     <h3 class="card-title">Agimut</h3>
                     <div class="card-expanded">
-                        <p class="card-desc">Visual feedback for agents. On any site.</p>
-                        <span class="card-cta">Try it →</span>
+                        <p class="card-desc">Visual feedback for agents.<br>On any site.</p>
+                        <div class="card-cta-row">
+                            <a href="https://github.com/mocreac/agimut" target="_blank" rel="noopener" class="card-cta card-cta-icon" aria-label="View Agimut on GitHub">
+                                <!-- Phosphor · GithubLogo (Regular) — outlined to match the outlined button. -->
+                                <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-37.51,39.91,8,8,0,0,0-5.65,12.87A24.34,24.34,0,0,1,162,176v8H110v-8a24.34,24.34,0,0,1,5.16-11.22,8,8,0,0,0-5.65-12.87A40,40,0,0,1,72,112v-8a41.74,41.74,0,0,1,6.06-21.46,8,8,0,0,0,1-6.5,43.85,43.85,0,0,1,.36-29.64,43.87,43.87,0,0,1,32.16,19.4A8,8,0,0,0,118.36,64h31.27a8,8,0,0,0,6.79-3.79,43.87,43.87,0,0,1,32.16-19.4,43.85,43.85,0,0,1,.36,29.64,8,8,0,0,0,1,6.5A41.72,41.72,0,0,1,200,104Z"/>
+                                </svg>
+                            </a>
+                            <a href="https://chromewebstore.google.com/detail/agimut/kjkhilpfobeadgnhnoomknmblnccakmf" target="_blank" rel="noopener" class="card-cta">Try it →</a>
+                        </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- Curations -->
                 <a href="/curations/" class="card">
@@ -321,9 +1383,16 @@
 
         </main>
 
-        <footer class="py-6 mt-16 flex items-center justify-between text-xs text-[var(--sand-700)] max-w-[960px] w-full mx-auto px-4">
-            <span class="tnum">© 2026 George Mocreac</span>
-            <a href="/privacy-policy/" class="hover:underline">Privacy</a>
+        <footer class="py-6 mt-16 flex items-center text-xs text-[var(--sand-700)] max-w-[912px] w-full mx-auto">
+            <div class="flex w-full items-center justify-between gap-3">
+                <span class="tnum">© 2026 George Mocreac</span>
+                <span class="online-status">
+                    <span class="online-status-dot" aria-hidden="true"></span>
+                    <span class="online-status-text">Checking…</span>
+                </span>
+            </div>
         </footer>
+        <script type="module" src="/src/online-status.ts"></script>
+        <script type="module" src="/src/email-popover.ts"></script>
     </body>
 </html>
