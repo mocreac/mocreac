@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>George Mocreac, Product & Brand Designer</title>
+        <link rel="canonical" href="https://mocreac.com/" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -23,21 +24,71 @@
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://mocreac.com" />
+        <meta property="og:url" content="https://mocreac.com/" />
         <meta property="og:title" content="George Mocreac, Product & Brand Designer" />
         <meta
             property="og:description"
             content="Design partner for product-led founders."
         />
+        <meta property="og:image" content="https://mocreac.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="George Mocreac — Product & Brand Designer" />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://mocreac.com" />
+        <meta property="twitter:url" content="https://mocreac.com/" />
         <meta property="twitter:title" content="George Mocreac, Product & Brand Designer" />
         <meta
             property="twitter:description"
             content="Design partner for product-led founders."
         />
+        <meta property="twitter:image" content="https://mocreac.com/og-image.png" />
+
+        <!-- Structured data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Person",
+                    "@id": "https://mocreac.com/#george",
+                    "name": "George Mocreac",
+                    "url": "https://mocreac.com/",
+                    "jobTitle": "Product & Brand Designer",
+                    "email": "mailto:mocreacgeorge@gmail.com",
+                    "description": "Product & Brand Designer working as a design partner for product-led founders.",
+                    "knowsAbout": [
+                        "Product Design",
+                        "Brand Identity",
+                        "UI/UX Design",
+                        "Design Systems",
+                        "Visual Identity"
+                    ]
+                },
+                {
+                    "@type": "WebSite",
+                    "@id": "https://mocreac.com/#website",
+                    "url": "https://mocreac.com/",
+                    "name": "George Mocreac, Product & Brand Designer",
+                    "description": "Portfolio of George Mocreac, a Product & Brand Designer and design partner for product-led founders.",
+                    "publisher": { "@id": "https://mocreac.com/#george" },
+                    "inLanguage": "en",
+                    "dateModified": "2026-05-29"
+                },
+                {
+                    "@type": "ProfessionalService",
+                    "@id": "https://mocreac.com/#service",
+                    "name": "George Mocreac — Product & Brand Design",
+                    "url": "https://mocreac.com/",
+                    "description": "Product and brand identity design for early-stage, product-led founders.",
+                    "provider": { "@id": "https://mocreac.com/#george" },
+                    "areaServed": "Worldwide",
+                    "serviceType": ["Product Design", "Brand Identity Design"]
+                }
+            ]
+        }
+        </script>
 
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-HD6JH2R6X4"></script>
@@ -76,7 +127,9 @@
             /* Card grid */
             .cards-row {
                 display: grid;
-                grid-template-columns: repeat(2, 1fr);
+                /* Mobile: single column. Two up on large phones / small
+                   tablets (≥480px), four across on desktop (≥768px). */
+                grid-template-columns: 1fr;
                 gap: 12px;
                 width: 100%;
                 max-width: 960px;
@@ -88,6 +141,9 @@
                    hovered. 360px = padding(36) + agimut-stage min(170) +
                    title(~34) + card-expanded(120). */
                 min-height: 360px;
+            }
+            @media (min-width: 480px) {
+                .cards-row { grid-template-columns: repeat(2, 1fr); }
             }
             @media (min-width: 768px) {
                 .cards-row { grid-template-columns: repeat(4, 1fr); }
@@ -835,9 +891,22 @@
             }
 
             /* On touch: always show description, no scaling */
+            /* Touch: cards rest collapsed (like desktop's resting state). A
+               first tap expands the card — mirroring the desktop hover — and a
+               second tap on its CTA performs the action (wired up in cards.ts).
+               The card itself isn't lifted/scaled here (it's full-width on
+               mobile, so a scale would overflow); only the inner content shifts. */
             @media (hover: none) {
-                .card-expanded { max-height: 200px; opacity: 1; }
-                .card { min-height: auto; padding-bottom: 18px; }
+                .card-expanded { max-height: 0; opacity: 0; }
+                .card.is-expanded {
+                    background: #fff;
+                    box-shadow:
+                        0 1px 2px rgba(0,0,0,0.04),
+                        0 24px 56px -16px rgba(0,0,0,0.18);
+                }
+                .card.is-expanded .card-expanded { max-height: 240px; opacity: 1; }
+                .card.is-expanded .card-visual { transform: scale(0.86) translateY(-4px); }
+                .card.is-expanded .card-title { transform: translateY(-2px); }
             }
 
             /* CTA pills */
@@ -1161,12 +1230,28 @@
             @media (prefers-reduced-motion: reduce) {
                 .online-status-dot { animation: none !important; }
             }
+
+            /* ────────── Mobile (≤640px) ──────────
+               Desktop layout is preserved untouched above this breakpoint.
+               The card grid already collapses to two columns on its own
+               (4→2 cols below 768px); here we only need to keep the email
+               menu inside the viewport and guard against horizontal scroll. */
+            @media (max-width: 640px) {
+                /* Drop the menu straight down from the Email pill, clamped so
+                   its left edge never runs off-screen on narrow phones. */
+                /* Full-width buttons stack into a column, so the menu spans
+                   the trigger's full width and drops straight beneath it. */
+                .email-panel { left: 0; right: 0; min-width: 0; width: auto; max-width: none; }
+                /* clip (not hidden) avoids creating a scroll container, so it
+                   never interferes with sticky/anchored positioning. */
+                body { overflow-x: clip; }
+            }
         </style>
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 font-sans min-h-screen flex flex-col">
-        <main class="flex-1 flex flex-col items-center justify-center px-4">
-            <section class="text-left pt-16 pb-12 w-full max-w-[960px] px-6">
-                <div class="flex items-center gap-4">
+        <main class="flex-1 flex flex-col items-center justify-center px-3 sm:px-4">
+            <section class="text-left pt-16 pb-12 w-full max-w-[960px] px-3 sm:px-6">
+                <div class="flex flex-wrap items-center gap-4">
                     <img src="/logo.svg" alt="George Mocreac" class="shrink-0 w-[2.97rem] h-[2.97rem] sm:w-[3.7125rem] sm:h-[3.7125rem]" />
                     <div>
                         <h1 class="text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.06em]">
@@ -1176,9 +1261,9 @@
                             Designer.
                         </p>
                     </div>
-                    <div class="flex gap-2 ml-auto self-end">
-                        <div class="email-popover" data-state="closed">
-                            <button type="button" class="pill pill-primary email-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="email-panel">Email</button>
+                    <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:ml-auto sm:self-end sm:justify-end">
+                        <div class="email-popover w-full sm:w-auto" data-state="closed">
+                            <button type="button" class="pill pill-primary email-trigger w-full sm:w-auto justify-center" aria-haspopup="menu" aria-expanded="false" aria-controls="email-panel">Email</button>
                             <div class="email-panel" id="email-panel" role="menu" aria-label="Choose mail provider">
                                 <a class="email-option" role="menuitem" target="_blank" rel="noopener"
                                    href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mocreacgeorge@gmail.com">
@@ -1215,7 +1300,7 @@
                                 </button>
                             </div>
                         </div>
-                        <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="pill pill-secondary">Telegram</a>
+                        <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="pill pill-secondary w-full sm:w-auto justify-center">Telegram</a>
                     </div>
                 </div>
             </section>
@@ -1383,7 +1468,7 @@
 
         </main>
 
-        <footer class="py-6 mt-16 flex items-center text-xs text-[var(--sand-700)] max-w-[912px] w-full mx-auto">
+        <footer class="py-6 mt-16 px-6 flex items-center text-xs text-[var(--sand-700)] max-w-[960px] w-full mx-auto">
             <div class="flex w-full items-center justify-between gap-3">
                 <span class="tnum">© 2026 George Mocreac</span>
                 <span class="online-status">
@@ -1394,5 +1479,6 @@
         </footer>
         <script type="module" src="/src/online-status.ts"></script>
         <script type="module" src="/src/email-popover.ts"></script>
+        <script type="module" src="/src/cards.ts"></script>
     </body>
 </html>

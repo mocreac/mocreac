@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Brand Identity Brief · George Mocreac</title>
+        <link rel="canonical" href="https://mocreac.com/brief/" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -27,6 +28,31 @@
         <meta property="twitter:url" content="https://mocreac.com/brief/" />
         <meta property="twitter:title" content="Brand Identity Brief · George Mocreac" />
         <meta property="twitter:description" content="A short brief so we can see if we're a fit and what to make together." />
+        <meta property="og:image" content="https://mocreac.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="twitter:image" content="https://mocreac.com/og-image.png" />
+
+        <!-- Structured data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": "https://mocreac.com/brief/#webpage",
+            "url": "https://mocreac.com/brief/",
+            "name": "Brand Identity Brief · George Mocreac",
+            "description": "A short brief so we can see if we're a fit and what to make together.",
+            "inLanguage": "en",
+            "dateModified": "2026-05-30",
+            "isPartOf": { "@id": "https://mocreac.com/#website" },
+            "about": {
+                "@type": "Person",
+                "name": "George Mocreac",
+                "url": "https://mocreac.com/",
+                "jobTitle": "Product & Brand Designer"
+            }
+        }
+        </script>
 
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-HD6JH2R6X4"></script>
@@ -326,7 +352,7 @@
             /* ────────── Progress indicator ────────── */
             .progress-track {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(5, 1fr);
                 gap: 6px;
                 flex: 1;
                 min-width: 60px;
@@ -484,7 +510,10 @@
             .input:focus, .textarea:focus {
                 border-color: var(--sand-900);
             }
-            .textarea { min-height: 88px; line-height: 1.55; }
+            /* Taller resting size + overflow:hidden so the auto-resize (in
+               brief.ts) is the only thing that ever changes the height — no
+               scrollbar flickers in while typing or behind a long placeholder. */
+            .textarea { min-height: 120px; line-height: 1.55; overflow: hidden; }
             .field.has-error .input,
             .field.has-error .textarea,
             .field.has-error .option-card,
@@ -704,11 +733,67 @@
             @media (prefers-reduced-motion: reduce) {
                 .online-status-dot { animation: none !important; }
             }
+
+            /* ────────── Mobile (≤640px) ──────────
+               Desktop layout is preserved untouched above this breakpoint.
+               Below it: inset the edge-to-edge header / shell / footer, soften
+               the step cards, and keep text inputs at 16px so iOS Safari does
+               not zoom the viewport on focus. */
+            @media (max-width: 640px) {
+                /* Header frame: 24px, same on every page. The content island
+                   (.shell → the step card) sits wider at 12px. */
+                header { padding-left: 24px; padding-right: 24px; }
+                .shell { padding-left: 12px; padding-right: 12px; }
+
+                /* The sticky action bar is the page's footer on mobile; the ©
+                   strip would only compete with it for the bottom edge. */
+                footer { display: none; }
+
+                .step { padding: 24px 20px; border-radius: 28px; }
+                .success-card { padding: 28px 22px; border-radius: 28px; }
+
+                .input, .textarea { font-size: 16px; }
+
+                /* Card sizes to the ACTIVE step (others leave layout) and sits
+                   at the top — no reserved tallest-step height, no floating
+                   centered gap. The form scrolls to top on each step change. */
+                .step:not(.is-active) { display: none; }
+                .steps-wrapper { align-content: start; }
+
+                /* Sticky white action bar, flush to the bottom of the screen.
+                   The solid fill + top border keep the buttons off the form
+                   content as it scrolls underneath; negative margins bleed it
+                   past the shell padding to span full width; safe-area padding
+                   clears the iOS home indicator. */
+                .step-nav {
+                    margin-left: -12px;
+                    margin-right: -12px;
+                    padding: 14px 24px max(16px, env(safe-area-inset-bottom));
+                    background: #fff;
+                    border-top: 1px solid var(--sand-200);
+                    flex-wrap: wrap;
+                    gap: 12px 16px;
+                }
+                /* Form nav: progress on its own row above Back + Continue. */
+                .progress-track { order: -1; flex-basis: 100%; max-width: none; }
+                /* Success nav: the two actions stacked full-width, reset removed. */
+                #success .step-nav { flex-direction: column; align-items: stretch; }
+                #success .step-nav .pill { width: 100%; justify-content: center; }
+                #btn-reset { display: none; }
+
+                /* Full-width buttons stack into a column, so the menu spans the
+                   trigger's full width and drops straight beneath it. */
+                .email-panel { left: 0; right: 0; min-width: 0; width: auto; max-width: none; }
+
+                /* clip (not hidden) guards against horizontal scroll without
+                   creating a scroll container that would break the sticky bar. */
+                body { overflow-x: clip; }
+            }
         </style>
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 min-h-screen flex flex-col">
 
-        <header class="py-6 flex items-center gap-4 max-w-[912px] w-full mx-auto">
+        <header class="py-6 flex flex-wrap items-center gap-4 max-w-[912px] w-full mx-auto">
             <a href="/" class="inline-flex shrink-0" aria-label="George Mocreac — Home">
                 <img src="/logo.svg" alt="George Mocreac" class="shrink-0 w-[2.97rem] h-[2.97rem] sm:w-[3.7125rem] sm:h-[3.7125rem]" />
             </a>
@@ -716,9 +801,9 @@
                 <p class="text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.06em] text-[#858585]">George Mocreac</p>
                 <h1 class="text-2xl sm:text-3xl font-semibold leading-[1.1] tracking-[-0.06em] text-[var(--sand-900)]">Brand Identity Brief</h1>
             </div>
-            <div class="flex gap-2 ml-auto self-end">
-                <div class="email-popover" data-state="closed">
-                    <button type="button" class="pill pill-primary email-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="email-panel">Email</button>
+            <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:ml-auto sm:self-end sm:justify-end">
+                <div class="email-popover w-full sm:w-auto" data-state="closed">
+                    <button type="button" class="pill pill-primary email-trigger w-full sm:w-auto justify-center" aria-haspopup="menu" aria-expanded="false" aria-controls="email-panel">Email</button>
                     <div class="email-panel" id="email-panel" role="menu" aria-label="Choose mail provider">
                         <a class="email-option" role="menuitem" target="_blank" rel="noopener"
                            href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mocreacgeorge@gmail.com">
@@ -751,7 +836,7 @@
                         </button>
                     </div>
                 </div>
-                <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="pill pill-secondary">Telegram</a>
+                <a href="https://t.me/georgemocreac" target="_blank" rel="noopener" class="pill pill-secondary w-full sm:w-auto justify-center">Telegram</a>
             </div>
         </header>
 
@@ -829,6 +914,24 @@
                     <!-- ─────── STEP 3 ─────── -->
                     <section class="step" data-step="3">
                         <div class="field" data-required>
+                            <label class="field-label" for="f-problem">What problem should this solve?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-problem" name="Problem to Solve" placeholder="e.g. We look smaller than we are and lose deals to flashier competitors — maybe 1 in 3."></textarea>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-value">What does solving it unlock?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-value" name="Value of Solving" placeholder="e.g. Charge more without flinching, close faster, stop re-explaining who we are. A rough number helps."></textarea>
+                        </div>
+
+                        <div class="field" data-required>
+                            <label class="field-label" for="f-urgency">How urgent is it, and what's driving the timing?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <textarea class="textarea" id="f-urgency" name="Urgency" placeholder="e.g. Rebrand before our raise in Q3. Or: no hard deadline, but it's nagged us for a year."></textarea>
+                        </div>
+                    </section>
+
+                    <!-- ─────── STEP 4 ─────── -->
+                    <section class="step" data-step="4">
+                        <div class="field" data-required>
                             <label class="field-label" for="f-target">Who is your target customer?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
                             <textarea class="textarea" id="f-target" name="Target Customer" placeholder="e.g. 28–40, design-conscious founders in EU/US, $80k–200k, value craft and clarity."></textarea>
                         </div>
@@ -844,8 +947,8 @@
                         </div>
                     </section>
 
-                    <!-- ─────── STEP 4 ─────── -->
-                    <section class="step" data-step="4">
+                    <!-- ─────── STEP 5 ─────── -->
+                    <section class="step" data-step="5">
                         <div class="field" data-required>
                             <label class="field-label" for="f-expect">What are your expectations for this project?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
                             <textarea class="textarea" id="f-expect" name="Expectations" placeholder="Logo system, type pairing, brand guidelines, packaging, web, whatever applies."></textarea>
@@ -879,6 +982,7 @@
                             <div class="progress-seg" data-step="2"></div>
                             <div class="progress-seg" data-step="3"></div>
                             <div class="progress-seg" data-step="4"></div>
+                            <div class="progress-seg" data-step="5"></div>
                         </div>
                         <button type="button" class="pill pill-primary" id="btn-next">
                             Continue
@@ -919,7 +1023,7 @@
             </div>
         </main>
 
-        <footer class="py-6 mt-16 flex items-center text-xs text-[var(--sand-700)] max-w-[912px] w-full mx-auto">
+        <footer class="py-6 mt-10 sm:mt-16 flex items-center text-xs text-[var(--sand-700)] max-w-[912px] w-full mx-auto">
             <div class="flex w-full items-center justify-between gap-3">
                 <span class="tnum">© 2026 George Mocreac</span>
                 <span class="online-status">

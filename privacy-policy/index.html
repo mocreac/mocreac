@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Agimut - Privacy Policy</title>
+        <link rel="canonical" href="https://mocreac.com/privacy-policy/" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -13,6 +14,37 @@
             name="description"
             content="Privacy Policy for Agimut - a design annotation Chrome extension"
         />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://mocreac.com/privacy-policy/" />
+        <meta property="og:title" content="Agimut - Privacy Policy" />
+        <meta property="og:description" content="Privacy Policy for Agimut - a design annotation Chrome extension." />
+        <meta property="og:image" content="https://mocreac.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://mocreac.com/privacy-policy/" />
+        <meta property="twitter:title" content="Agimut - Privacy Policy" />
+        <meta property="twitter:description" content="Privacy Policy for Agimut - a design annotation Chrome extension." />
+        <meta property="twitter:image" content="https://mocreac.com/og-image.png" />
+
+        <!-- Structured data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": "https://mocreac.com/privacy-policy/#webpage",
+            "url": "https://mocreac.com/privacy-policy/",
+            "name": "Agimut - Privacy Policy",
+            "description": "Privacy Policy for Agimut, a design annotation Chrome extension.",
+            "inLanguage": "en",
+            "dateModified": "2026-04-10",
+            "isPartOf": { "@id": "https://mocreac.com/#website" }
+        }
+        </script>
 
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-HD6JH2R6X4"></script>
@@ -62,6 +94,14 @@
             }
             @media (prefers-reduced-motion: reduce) {
                 .online-status-dot { animation: none !important; }
+            }
+
+            /* ────────── Mobile (≤640px) ──────────
+               The article column (w-full lg:w-1/3 p-4) already adapts; only the
+               edge-to-edge header / footer need a matching 16px inset. */
+            @media (max-width: 640px) {
+                header, footer { padding-left: 24px; padding-right: 24px; }
+                body { overflow-x: clip; }
             }
         </style>
     </head>

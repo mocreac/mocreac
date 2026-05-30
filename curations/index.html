@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Curations · George Mocreac</title>
+        <link rel="canonical" href="https://mocreac.com/curations/" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -27,6 +28,31 @@
         <meta property="twitter:url" content="https://mocreac.com/curations/" />
         <meta property="twitter:title" content="Curations · George Mocreac" />
         <meta property="twitter:description" content="Tools, references, and inspiration I keep going back to." />
+        <meta property="og:image" content="https://mocreac.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="twitter:image" content="https://mocreac.com/og-image.png" />
+
+        <!-- Structured data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": "https://mocreac.com/curations/#webpage",
+            "url": "https://mocreac.com/curations/",
+            "name": "Curations · George Mocreac",
+            "description": "Tools, references, and inspiration George Mocreac keeps going back to.",
+            "inLanguage": "en",
+            "dateModified": "2026-05-29",
+            "isPartOf": { "@id": "https://mocreac.com/#website" },
+            "author": {
+                "@type": "Person",
+                "name": "George Mocreac",
+                "url": "https://mocreac.com/",
+                "jobTitle": "Product & Brand Designer"
+            }
+        }
+        </script>
 
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-HD6JH2R6X4"></script>
@@ -279,6 +305,16 @@
             }
             @media (prefers-reduced-motion: reduce) {
                 .online-status-dot { animation: none !important; }
+            }
+
+            /* ────────── Mobile (≤640px) ──────────
+               24px header/footer frame (consistent across pages); the card grid
+               island sits wider at 12px. The grid already collapses to a single
+               column below 640px. */
+            @media (max-width: 640px) {
+                header, footer { padding-left: 24px; padding-right: 24px; }
+                .shell { padding-left: 12px; padding-right: 12px; }
+                body { overflow-x: clip; }
             }
         </style>
     </head>

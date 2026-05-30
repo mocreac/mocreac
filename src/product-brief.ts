@@ -23,7 +23,7 @@ const DELIVERABLES: readonly string[] = [
 // ─────────────────────────────────────────────────────────
 // State
 let currentStep = 1;
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 // ─────────────────────────────────────────────────────────
 // DOM refs
@@ -275,7 +275,7 @@ loadDraft();
 // Auto-resize textareas
 function autoresize(t: HTMLTextAreaElement): void {
     t.style.height = "auto";
-    t.style.height = Math.min(t.scrollHeight, 400) + "px";
+    t.style.height = Math.min(t.scrollHeight, 600) + "px";
 }
 document.querySelectorAll<HTMLTextAreaElement>(".textarea").forEach((t) => {
     t.addEventListener("input", () => autoresize(t));

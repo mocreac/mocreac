@@ -1,0 +1,20 @@
+# George Mocreac
+
+> George Mocreac is a Product & Brand Designer working as a design partner for product-led founders. The site is a portfolio and a set of intake briefs for starting design work together.
+
+George Mocreac designs products and brand identities for early-stage, product-led companies. Work spans product (UI/UX, interface design, design systems) and brand (identity, visual language, positioning). Engagements typically start with a short brief to check fit and scope what to make together.
+
+## Pages
+
+- [Home](https://mocreac.com/): Overview of George Mocreac's work as a Product & Brand Designer and design partner for product-led founders.
+- [Brand Identity Brief](https://mocreac.com/brief/): A short intake brief to scope a brand identity engagement and check fit.
+- [Product Design Brief](https://mocreac.com/product-brief/): A short intake brief to scope a product design engagement and check fit.
+- [Curations](https://mocreac.com/curations/): Tools, references, and inspiration George keeps coming back to.
+
+## Contact
+
+- Email: mocreacgeorge@gmail.com
+
+## Notes
+
+- Privacy policy: https://mocreac.com/privacy-policy/ (relates to Agimut, a design annotation Chrome extension).
