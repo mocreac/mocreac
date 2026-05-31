@@ -13,7 +13,6 @@ import "./online-status.ts";
 
 type CategoryId =
     | "inspiration"
-    | "patterns"
     | "fonts"
     | "tools"
     | "components"
@@ -39,7 +38,6 @@ type Item = {
 const CATEGORIES: readonly Category[] = [
     { id: "inspiration", label: "Inspiration" },
     { id: "components", label: "Components" },
-    { id: "patterns", label: "Patterns" },
     { id: "fonts", label: "Fonts" },
     { id: "color", label: "Color" },
     { id: "tools", label: "Tools" },
@@ -47,14 +45,13 @@ const CATEGORIES: readonly Category[] = [
 
 const ITEMS: readonly Item[] = [
     {
-        title: "SVG Pattern Generator",
-        source: "nucleoapp.com",
-        url: "https://nucleoapp.com/svg-patterns/",
-        category: "patterns",
+        title: "Best Designs on X",
+        source: "bestdesignsonx.com",
+        url: "https://bestdesignsonx.com/?ref=uigoodies.com",
+        category: "inspiration",
         description:
-            "Customizable seamless SVG patterns. Adjust color, opacity, layer them, export production-ready code.",
-        ogImage:
-            "https://nucleoapp.com/svg-patterns/assets/img/open-graph-svg-patterns.png",
+            "Hand-picked design inspiration from top creatives on X — logos, UI, and branding, refreshed hourly.",
+        ogImage: "https://bestdesignsonx.com/og-image.png",
     },
     {
         title: "Viewport UI",
