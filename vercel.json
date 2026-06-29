@@ -1,5 +1,19 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
-    "cleanUrls": true,
-    "trailingSlash": true
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/calendar",
+      "destination": "https://mocalendar.vercel.app/calendar"
+    },
+    {
+      "source": "/calendar/",
+      "destination": "https://mocalendar.vercel.app/calendar"
+    },
+    {
+      "source": "/calendar/:path*",
+      "destination": "https://mocalendar.vercel.app/calendar/:path*"
+    }
+  ]
 }
