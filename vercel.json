@@ -5,11 +5,11 @@
   "rewrites": [
     {
       "source": "/calendar",
-      "destination": "https://mocalendar.vercel.app/calendar"
+      "destination": "https://mocalendar.vercel.app/calendar/"
     },
     {
       "source": "/calendar/",
-      "destination": "https://mocalendar.vercel.app/calendar"
+      "destination": "https://mocalendar.vercel.app/calendar/"
     },
     {
       "source": "/calendar/:path*",
