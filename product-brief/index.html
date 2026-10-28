@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Product Design Brief · George Mocreac</title>
         <link rel="canonical" href="https://mocreac.com/product-brief/" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -787,6 +789,7 @@
                 body { overflow-x: clip; }
             }
         </style>
+        <link rel="stylesheet" href="/src/corners.css" />
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 min-h-screen flex flex-col">
 
@@ -803,27 +806,27 @@
                     <button type="button" class="pill pill-primary email-trigger w-full sm:w-auto justify-center" aria-haspopup="menu" aria-expanded="false" aria-controls="email-panel">Email</button>
                     <div class="email-panel" id="email-panel" role="menu" aria-label="Choose mail provider">
                         <a class="email-option" role="menuitem" target="_blank" rel="noopener"
-                           href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=mocreacgeorge@gmail.com">
+                           href="https://mail.google.com/mail/?tf=cmmail/?view=cm&amp;fs=1&amp;to=amp;to=mocreacgeorge@gmail.com">
                             <span class="email-option-icon" aria-hidden="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"/></svg>
+                                <svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:envelope" width="14" height="14"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"/></svg>
                             </span>
                             <span class="email-option-label">Gmail</span>
-                            <svg class="email-option-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg>
+                            <svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:arrow-up-right" class="email-option-arrow" width="12" height="12" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg>
                         </a>
                         <a class="email-option" role="menuitem" target="_blank" rel="noopener"
                            href="https://outlook.live.com/mail/0/deeplink/compose?to=mocreacgeorge@gmail.com">
                             <span class="email-option-icon" aria-hidden="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78ZM40,200V111.53l65.9,47a8,8,0,0,0,4.65,1.49h34.9a8,8,0,0,0,4.65-1.49l65.9-47V200Z"/></svg>
+                                <svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:envelope-simple-open" width="14" height="14"><path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78ZM40,200V111.53l65.9,47a8,8,0,0,0,4.65,1.49h34.9a8,8,0,0,0,4.65-1.49l65.9-47V200Z"/></svg>
                             </span>
                             <span class="email-option-label">Outlook</span>
-                            <svg class="email-option-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg>
+                            <svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:arrow-up-right" class="email-option-arrow" width="12" height="12" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg>
                         </a>
                         <div class="email-divider" aria-hidden="true"></div>
                         <button type="button" class="email-option email-option-copy" role="menuitem" data-copy="mocreacgeorge@gmail.com">
                             <span class="email-option-icon" aria-hidden="true">
                                 <span class="email-option-icon-swap">
-                                    <svg class="email-option-icon-copy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></svg>
-                                    <svg class="email-option-icon-check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="14" height="14" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+                                    <svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:copy" class="email-option-icon-copy" width="14" height="14"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></svg>
+                                    <svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:check" class="email-option-icon-check" width="14" height="14"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
                                 </span>
                             </span>
                             <span class="email-option-label">
@@ -851,17 +854,17 @@
                     <!-- ─────── STEP 1 ─────── -->
                     <section class="step is-active" data-step="1">
                         <div class="field" data-required>
-                            <label class="field-label" for="f-name">Your name &amp; contacts<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-name">Your name &amp; contacts<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <input class="input" type="text" id="f-name" name="Name & Contacts" autocomplete="name" placeholder="e.g. Anna Petrova, anna@product.co" />
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-product">Product / company name<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-product">Product / company name<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <input class="input" type="text" id="f-product" name="Product / Company" placeholder="The name as you'd write it on a pitch deck" />
                         </div>
 
                         <div class="field" data-required data-radio>
-                            <label class="field-label">What's the budget for this project?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label">What's the budget for this project?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <div class="option-row" role="radiogroup" aria-label="Budget">
                                 <label class="option-card">
                                     <input type="radio" name="Budget" value="< €2k" />
@@ -883,7 +886,7 @@
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-timeline">What's the timeline of this project?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-timeline">What's the timeline of this project?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-timeline" name="Timeline" placeholder="e.g. Kickoff in early June, beta release by end of July."></textarea>
                         </div>
                     </section>
@@ -891,17 +894,17 @@
                     <!-- ─────── STEP 2 ─────── -->
                     <section class="step" data-step="2">
                         <div class="field" data-required>
-                            <label class="field-label" for="f-describe">Describe the product<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-describe">Describe the product<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-describe" name="About the Product" placeholder="What it does and current stage — idea, MVP, live, redesign."></textarea>
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-goals">Short-term &amp; long-term goals<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-goals">Short-term &amp; long-term goals<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-goals" name="Goals" placeholder="6 months: …   1 year: …   3 years: …"></textarea>
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-target">Who's the target user?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-target">Who's the target user?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-target" name="Target User" placeholder="e.g. PMs at 50–500 person SaaS companies. EU/US. Live in Linear & Notion."></textarea>
                         </div>
                     </section>
@@ -909,17 +912,17 @@
                     <!-- ─────── STEP 3 ─────── -->
                     <section class="step" data-step="3">
                         <div class="field" data-required>
-                            <label class="field-label" for="f-problem">What problem should this solve?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-problem">What problem should this solve?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-problem" name="Problem to Solve" placeholder="e.g. ~30% of new users drop off before they activate. Support answers the same 5 questions all day."></textarea>
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-value">What does solving it unlock?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-value">What does solving it unlock?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-value" name="Value of Solving" placeholder="e.g. Higher activation, fewer tickets, a flow we can finally demo. Put a number on it if you can."></textarea>
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-urgency">How urgent is it, and what's driving the timing?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-urgency">How urgent is it, and what's driving the timing?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-urgency" name="Urgency" placeholder="e.g. Needs to ship before the next funding round. Or: no hard deadline, but it's capping growth."></textarea>
                         </div>
                     </section>
@@ -927,19 +930,19 @@
                     <!-- ─────── STEP 4 ─────── -->
                     <section class="step" data-step="4">
                         <div class="field" data-required data-chips>
-                            <label class="field-label">What needs designing?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label">What needs designing?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <div class="chip-grid" id="deliverables-grid"></div>
                             <input type="hidden" name="Deliverables" id="f-deliverables" />
                             <textarea class="textarea mt-3" id="f-deliv-notes" name="Deliverables · notes" placeholder="Anything to clarify? (optional)"></textarea>
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-competitors">Competitors / similar products<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-competitors">Competitors / similar products<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-competitors" name="Competitors" placeholder="Names + links if you have them."></textarea>
                         </div>
 
                         <div class="field" data-required>
-                            <label class="field-label" for="f-diff">How does it differentiate?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-diff">How does it differentiate?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-diff" name="Differentiation" placeholder="What's the angle no one else can easily copy?"></textarea>
                         </div>
                     </section>
@@ -947,7 +950,7 @@
                     <!-- ─────── STEP 5 ─────── -->
                     <section class="step" data-step="5">
                         <div class="field" data-required>
-                            <label class="field-label" for="f-platforms">Where will it live?<span class="req" aria-hidden="true"><svg viewBox="32 32 192 192" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="128" y1="40" x2="128" y2="216"/><line x1="51.7" y1="84" x2="204.3" y2="172"/><line x1="51.7" y1="172" x2="204.3" y2="84"/></svg></span></label>
+                            <label class="field-label" for="f-platforms">Where will it live?<span class="req" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor" data-icon="phosphor:asterisk-simple" width="16"><path d="M211,103.43l-70.13,28,49.47,63.61a8,8,0,1,1-12.63,9.82L128,141,78.32,204.91a8,8,0,0,1-12.63-9.82l49.47-63.61L45,103.43A8,8,0,0,1,51,88.57l69,27.61V40a8,8,0,0,1,16,0v76.18l69-27.61A8,8,0,1,1,211,103.43Z"/></svg></span></label>
                             <textarea class="textarea" id="f-platforms" name="Platforms" placeholder="e.g. iOS first, web dashboard for admins later."></textarea>
                         </div>
 

@@ -20,19 +20,23 @@ function buildSvg(rot: number): string {
     );
 }
 
+// Reuse a single dedicated <link> for the animation. The static file-based
+// icon links in the HTML head are left untouched so crawlers (e.g. Google's
+// favicon fetcher, which ignores data: URIs) always find a real asset.
+let spinLink: HTMLLinkElement | null = null;
+
 function tick(): void {
     const svg = buildSvg(angle);
     const dataUri = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 
-    document.querySelectorAll('link[rel~="icon"]').forEach((el) => {
-        el.parentNode?.removeChild(el);
-    });
-
-    const link = document.createElement("link");
-    link.rel = "icon";
-    link.type = "image/svg+xml";
-    link.href = dataUri;
-    document.head.appendChild(link);
+    if (!spinLink) {
+        spinLink = document.createElement("link");
+        spinLink.rel = "icon";
+        spinLink.type = "image/svg+xml";
+        spinLink.id = "favicon-spin";
+        document.head.appendChild(spinLink);
+    }
+    spinLink.href = dataUri;
 
     angle = (angle + 90) % 360;
 }

@@ -4,6 +4,13 @@
   "trailingSlash": true,
   "routes": [
     {
+      "src": "/curations/?",
+      "status": 308,
+      "headers": {
+        "Location": "/notes/"
+      }
+    },
+    {
       "src": "/calendar",
       "dest": "https://mocalendar.vercel.app/calendar/"
     },

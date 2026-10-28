@@ -9,7 +9,8 @@ const root = fileURLToPath(new URL(".", import.meta.url));
 //   /                  → index.html
 //   /brief/            → brief/index.html
 //   /product-brief/    → product-brief/index.html
-//   /curations/        → curations/index.html
+//   /notes/            → notes/index.html
+//   /curations/        → legacy redirect
 //   /privacy-policy/   → privacy-policy/index.html
 export default defineConfig({
     appType: "mpa",
@@ -21,6 +22,7 @@ export default defineConfig({
                 main: resolve(root, "index.html"),
                 brief: resolve(root, "brief/index.html"),
                 productBrief: resolve(root, "product-brief/index.html"),
+                notes: resolve(root, "notes/index.html"),
                 curations: resolve(root, "curations/index.html"),
                 privacy: resolve(root, "privacy-policy/index.html"),
             },

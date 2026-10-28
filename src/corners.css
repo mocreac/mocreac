@@ -1,0 +1,10 @@
+/* Subtle squircle corners.
+   Unsupported browsers retain the existing border-radius as a fallback. */
+:root { --corner-smoothing: 1.25; }
+@supports (corner-shape: superellipse(1.6)) {
+    *, *::before, *::after { corner-shape: superellipse(var(--corner-smoothing)); }
+    /* Fully rounded controls retain circular ends. */
+    .pill, .tab, .copy-button, .chip, .email-option, .card-cta,
+    .progress-seg, .progress-seg::after,
+    .online-status-dot, .agimut-terminal-dot { corner-shape: round; }
+}
