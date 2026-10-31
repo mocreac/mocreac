@@ -7,7 +7,7 @@
 // CTA to perform the action. Desktop behaviour is left untouched.
 
 function initCardExpand(): void {
-    const hoverNone = window.matchMedia("(hover: none)");
+    const hoverNone = window.matchMedia("(hover: none), (pointer: coarse)");
     const cards = Array.from(
         document.querySelectorAll<HTMLElement>(".cards-row .card"),
     );

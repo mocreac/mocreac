@@ -47,6 +47,20 @@ const CATEGORIES: readonly Category[] = [
 
 const ITEMS: readonly Item[] = [
     {
+        title: "Stageshow",
+        source: "Benji Taylor · Agent skill",
+        url: "https://github.com/benjitaylor/skills/tree/main/stageshow",
+        category: "tools",
+        description: "An agent skill for building product UI illustrations, feature cards, cursor demos, and bento grids in React. Install: npx skills add benjitaylor/skills --skill stageshow",
+    },
+    {
+        title: "Skills for Designers and Engineers",
+        source: "Emil Kowalski · Agent skills",
+        url: "https://github.com/emilkowalski/skills",
+        category: "tools",
+        description: "Agent skills for interface design, animation, and interaction polish. Install: npx skills@latest add emilkowalski/skills",
+    },
+    {
         title: "Quiet Scrollbars", source: "Rauno Freiberg", url: "https://x.com/raunofreiberg/status/2048057305439039535", category: "snippets", kind: "snippet",
         description: "A small CSS detail. Copy the prompt and give it to your coding agent.",
     },
@@ -99,6 +113,16 @@ const gridEl = document.getElementById("notes-grid") as HTMLElement;
 const emptyEl = document.getElementById("empty-state") as HTMLElement;
 
 let activeCategory: CategoryId | "all" = "all";
+const cards = new Map<Item, HTMLElement>();
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+function updateTabs(): void {
+    for (const button of tabsEl.querySelectorAll<HTMLButtonElement>("button")) {
+        const active = button.dataset.cat === activeCategory;
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+    }
+}
 
 function renderTabs(): void {
     const counts: Record<string, number> = { all: ITEMS.length };
@@ -127,16 +151,24 @@ function renderTabs(): void {
             '<span class="tab-label">' + t.label + "</span>" +
             '<span class="tab-count tnum">' + t.count + "</span>";
         btn.addEventListener("click", () => {
+            if (activeCategory === t.id) return;
             activeCategory = t.id;
-            renderTabs();
-            renderGrid();
-            tabsEl.querySelector<HTMLButtonElement>('[data-cat="' + activeCategory + '"]')?.focus();
+            updateTabs();
+            renderGrid(true);
         });
         tabsEl.appendChild(btn);
     }
 }
 
-function renderGrid(): void {
+function renderGrid(animate = false): void {
+    const previous = new Map(
+        [...gridEl.children].map(card => [card, card.getBoundingClientRect()]),
+    );
+    const previousHeight = gridEl.getBoundingClientRect().height;
+    gridEl.getAnimations().forEach(animation => animation.cancel());
+    for (const card of cards.values()) {
+        card.getAnimations().forEach(animation => animation.cancel());
+    }
     const filtered =
         activeCategory === "all"
             ? ITEMS
@@ -154,10 +186,15 @@ function renderGrid(): void {
     gridEl.style.display = "grid";
 
     for (const item of filtered) {
+        const cached = cards.get(item);
+        if (cached) {
+            gridEl.appendChild(cached);
+            continue;
+        }
         if (item.kind) {
             const note = renderNote(item);
+            cards.set(item, note);
             gridEl.appendChild(note);
-            masonryObserver.observe(note);
             continue;
         }
         const card = document.createElement("a");
@@ -184,7 +221,31 @@ function renderGrid(): void {
             banner.textContent = item.title;
         });
         gridEl.appendChild(card);
+        cards.set(item, card);
+    }
+
+    // Resolve every row span before painting the newly filtered grid.
+    const visible = [...gridEl.children] as HTMLElement[];
+    const heights = visible.map(card => card.getBoundingClientRect().height);
+    visible.forEach((card, index) => {
+        card.style.gridRowEnd = `span ${Math.ceil(heights[index] + 16)}`;
         masonryObserver.observe(card);
+    });
+
+    if (animate && !reduceMotion.matches) {
+        const options = { duration: 280, easing: "cubic-bezier(.22, 1, .36, 1)" };
+        const nextHeight = gridEl.getBoundingClientRect().height;
+        gridEl.animate({ height: [`${previousHeight}px`, `${nextHeight}px`] }, options);
+        for (const card of visible) {
+            const before = previous.get(card);
+            const after = card.getBoundingClientRect();
+            card.animate(before ? {
+                translate: [`${before.left - after.left}px ${before.top - after.top}px`, "0px 0px"],
+            } : {
+                opacity: [0, 1],
+                translate: ["0px 8px", "0px 0px"],
+            }, options);
+        }
     }
 }
 
@@ -308,9 +369,9 @@ function renderNote(item: Item): HTMLElement {
             <div class="corner-diagrams"></div>
             <div class="note-content">
                 <div class="note-controls">
-                    <div class="number-field"><button class="scrub-handle" type="button" aria-label="Drag to adjust radius" title="Radius at 90° · Drag to adjust"><i class="math-handle" aria-hidden="true">r</i></button><input type="number" min="1" max="100" step="0.01" value="16" aria-label="90 degree reference radius in pixels" /><span>px</span></div>
-                    <div class="number-field"><button class="scrub-handle" type="button" aria-label="Drag to adjust angle" title="Interior angle · Drag to adjust"><i class="math-handle" aria-hidden="true">θ</i></button><input type="number" min="1" max="179" step="1" value="120" aria-label="Interior angle in degrees" /><span>°</span></div>
-                    <div class="number-field"><button class="scrub-handle" type="button" aria-label="Drag to adjust result radius" title="Radius at this angle · Drag to adjust"><i class="math-handle" aria-hidden="true">R</i></button><input type="number" step="0.1" aria-label="Result radius in pixels" /><span>px</span></div>
+                    <div class="number-field"><button class="scrub-handle" type="button" aria-label="Drag to adjust radius" title="Radius at 90° · Drag to adjust"><i class="math-handle" aria-hidden="true">r</i></button><input inputmode="decimal" type="number" min="1" max="100" step="0.01" value="16" aria-label="90 degree reference radius in pixels" /><span>px</span></div>
+                    <div class="number-field"><button class="scrub-handle" type="button" aria-label="Drag to adjust angle" title="Interior angle · Drag to adjust"><i class="math-handle" aria-hidden="true">θ</i></button><input inputmode="decimal" type="number" min="1" max="179" step="1" value="120" aria-label="Interior angle in degrees" /><span>°</span></div>
+                    <div class="number-field"><button class="scrub-handle" type="button" aria-label="Drag to adjust result radius" title="Radius at this angle · Drag to adjust"><i class="math-handle" aria-hidden="true">R</i></button><input inputmode="decimal" type="number" step="0.1" aria-label="Result radius in pixels" /><span>px</span></div>
                 </div>
             </div>`;
         const reference = card.querySelectorAll<HTMLInputElement>("input")[0];
