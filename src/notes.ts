@@ -85,6 +85,10 @@ const ITEMS: readonly Item[] = [
         ogImage: "https://cuedesign.space/og-image.png",
     },
     {
+        title: "Font Smoothing", source: "Gustavo Fior · Craft", url: "https://craft.gustavofior.com/font-smoothing", category: "snippets", kind: "snippet",
+        description: "Grayscale font smoothing on macOS.",
+    },
+    {
         title: "Skills", source: "Agent skills", url: "", category: "snippets", kind: "skills",
         description: "Install agent skills from Benji, Emil, and Jakub.",
     },
@@ -291,6 +295,14 @@ function renderGrid(animate = false): void {
         }
     }
 }
+
+const FONT_SMOOTHING_PROMPT = `Apply grayscale font smoothing globally in the existing shared stylesheet:
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+This non-standard property affects macOS text rendering; other operating systems ignore it. Preserve the existing font families, sizes, weights, and colors. Check light and dark surfaces, especially text at weight 300 or below, which can become too thin on low-resolution displays.`;
 
 const SCROLLBAR_PROMPT = `Use thin gray native scrollbars with transparent tracks on the page and all scrollable containers. Apply:
 
@@ -614,17 +626,21 @@ function renderNote(item: Item): HTMLElement {
         update();
     } else {
         card.classList.add("prompt-card");
+        const smoothing = item.title === 'Font Smoothing';
+        const prompt = smoothing ? FONT_SMOOTHING_PROMPT : SCROLLBAR_PROMPT;
+        const code = smoothing ? 'body {\n  -webkit-font-smoothing: antialiased;\n}' : 'scrollbar-width: thin;\nscrollbar-color: gray transparent;';
         card.innerHTML = heading + `
-                <p class="note-description">${escapeText(SCROLLBAR_PROMPT.split("\n\n")[0])}</p>
-                <pre class="code-block"><code>scrollbar-width: thin;
-scrollbar-color: gray transparent;</code></pre>
+                <p class="note-description">${escapeText(smoothing ? "Grayscale antialiasing can make text look lighter and cleaner, especially on dark surfaces. Thin font weights may become harder to read on low-resolution screens." : SCROLLBAR_PROMPT.split("\n\n")[0])}</p>
+                ${smoothing ? '<p class="note-description">macOS only. This non-standard property has no effect on Windows, Linux, iOS, or Android.</p>' : ''}
+                <pre class="code-block"><code>${escapeText(code)}</code></pre>
+                ${smoothing ? '<a class="note-source" href="https://craft.gustavofior.com/font-smoothing" target="_blank" rel="noopener noreferrer">By Gustavo Fior · Craft</a>' : ''}
                 <div class="note-actions"><button type="button" class="copy-button">Copy Prompt</button></div>
                 <p class="copy-feedback" role="status"></p>
             </div>`;
         const button = card.querySelector("button")!;
         button.addEventListener("click", async () => {
             try {
-                await navigator.clipboard.writeText(SCROLLBAR_PROMPT);
+                await navigator.clipboard.writeText(prompt);
                 button.textContent = "Copied!";
                 card.querySelector(".copy-feedback")!.textContent = "";
                 window.setTimeout(() => { button.textContent = "Copy Prompt"; }, 2000);
