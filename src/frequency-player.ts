@@ -60,9 +60,12 @@ function select(index: number) {
     save('frequency-track', t.id);
     feedback.textContent = '';
     update();
-    if ('mediaSession' in navigator) navigator.mediaSession.metadata = new MediaMetadata({ title: t.use, artist: `${t.title} · ${t.hz} Hz`, album: 'Listening notes' });
+    if ('mediaSession' in navigator && 'MediaMetadata' in window) navigator.mediaSession.metadata = new MediaMetadata({ title: t.use, artist: `${t.title} · ${t.hz} Hz`, album: 'Listening notes' });
 }
 function update() {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = source ? 'playing' : 'paused';
+    }
     for (const button of [play]) {
         button.innerHTML = phosphorIcon(source ? 'pauseFill' : 'playFill');
         button.setAttribute('aria-label', source ? 'Pause session' : 'Play session');
@@ -81,7 +84,13 @@ async function start() {
     const request = ++generation;
     loading = true;
     try {
-        context ??= new AudioContext();
+        if (!context) {
+            context = new AudioContext();
+            context.addEventListener('statechange', () => {
+                // Reflect OS interruptions and browser-initiated suspension in the UI.
+                if (source && context?.state !== 'running') { stopAudio(); update(); }
+            });
+        }
         gain ??= context.createGain();
         analyser ??= context.createAnalyser();
         analyser.fftSize = 2048;
@@ -145,9 +154,25 @@ pin.onclick = () => {
     card.dispatchEvent(new CustomEvent('frequency-pin-change', { bubbles: true }));
 };
 if ('mediaSession' in navigator) {
-    navigator.mediaSession.setActionHandler('play', () => { void start(); });
-    navigator.mediaSession.setActionHandler('pause', () => { stopAudio(); update(); });
+    const handlers: Partial<Record<MediaSessionAction, MediaSessionActionHandler>> = {
+        play: () => { void start(); },
+        pause: () => { stopAudio(); update(); },
+        stop: () => { stopAudio(); update(); },
+    };
+    for (const [action, handler] of Object.entries(handlers)) {
+        try { navigator.mediaSession.setActionHandler(action as MediaSessionAction, handler); }
+        catch { /* Some browsers expose only a subset of media actions. */ }
+    }
 }
+// Fallback for browsers that dispatch hardware media keys directly to the page.
+document.addEventListener('keydown', event => {
+    if (event.repeat) return;
+    if (event.key === 'MediaPlayPause') { event.preventDefault(); togglePlayback(); }
+    else if (event.key === 'MediaPause' || event.key === 'MediaStop') {
+        event.preventDefault(); stopAudio(); update();
+    } else if (event.key === 'MediaPlay') { event.preventDefault(); void start(); }
+});
+
 select(selected);
 updateVolume();
 visibility();

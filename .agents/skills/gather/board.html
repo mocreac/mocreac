@@ -1,0 +1,1386 @@
+<!doctype html>
+<!--
+  Gather board. Copy this file to .gather/<brief>/index.html and write board.js beside it:
+
+  window.board = {
+    title: "Settings Page",
+    brief: "Desktop settings page, looking for grouping and density.",
+    groups: [
+      {
+        title: "Grouping",
+        description: "How long lists of options are split up.",
+        items: [
+          {
+            image: "img/4c03063e.jpg",
+            title: "Linear",
+            source: "Mobbin",
+            url: "https://mobbin.com/screens/4c03063e",
+            note: "Take the grouped list, not the colours."
+          }
+        ]
+      }
+    ]
+  };
+
+  The board title takes Title Case, such as "Agent Chats". Group titles take two or three words in Title Case, such as "Agent Activity". `source` puts › between a library and the board inside it, such as "Pond › Are.na". An item may add `details`, extra rows for the viewer such as { Creator: "Kevin", Style: ["Minimal", "Clean"] }. `image` is a path beside this file or a full URL. `url` is the original, and it identifies the item, so each one is unique.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fdfdfc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
+    <title>Gather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&display=swap"
+    />
+    <style>
+      :root {
+        --gray-1: #fdfdfc;
+        --gray-2: #f9f9f8;
+        --gray-3: #f1f0ef;
+        --gray-4: #e9e8e6;
+        --gray-5: #e2e1de;
+        --gray-10: #6b6b65;
+        --gray-11: #63635e;
+        --gray-12: #21201c;
+        --shadow-strength: 1;
+        --accent: #0077b6;
+        --text-on-accent: #fff;
+        --background-raised: #fff;
+        --background-hover: var(--gray-4);
+        --fill-hover: color-mix(in oklab, var(--gray-12) 5%, transparent);
+        color-scheme: light dark;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --gray-1: #111110;
+          --gray-2: #191918;
+          --gray-3: #222221;
+          --gray-4: #2a2a28;
+          --gray-5: #31312e;
+          --gray-10: #8f8e87;
+          --gray-11: #b5b3ad;
+          --gray-12: #eeeeec;
+          --shadow-strength: 3;
+          --accent: #02bbff;
+          --text-on-accent: #111110;
+          --background-raised: var(--gray-2);
+        }
+      }
+
+      :root {
+        --border-primary: color-mix(in oklab, var(--gray-12) 7%, transparent);
+        --border-secondary: color-mix(in oklab, var(--gray-12) 12%, transparent);
+        --text-primary: var(--gray-12);
+        --text-secondary: color-mix(in oklab, var(--gray-12) 80%, var(--gray-11));
+        --text-tertiary: var(--gray-11);
+        --text-quaternary: var(--gray-10);
+        --background-primary: var(--gray-1);
+        --background-tertiary: var(--gray-3);
+        --shadow-raised:
+          0 0 0 1px var(--border-secondary),
+          0 1px 2px oklch(0 0 0 / calc(4% * var(--shadow-strength))),
+          0 4px 12px oklch(0 0 0 / calc(3% * var(--shadow-strength)));
+        --shadow-floating:
+          0 0 0 1px var(--border-secondary),
+          0 2px 4px oklch(0 0 0 / calc(4% * var(--shadow-strength))),
+          0 12px 32px oklch(0 0 0 / calc(8% * var(--shadow-strength)));
+        --font-weight-400: "wght" 400, "opsz" 14;
+        --font-weight-500: "wght" 500, "opsz" 14;
+        --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+        --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+        --duration-snappy: 220ms;
+        --duration-exit: 160ms;
+        --radius-control: 8px;
+        --column: 200px;
+        --gap: 24px;
+        --inset: 48px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        font-variation-settings: inherit;
+        color: inherit;
+        text-decoration: none;
+        border: 0;
+      }
+
+      img,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+
+      button {
+        cursor: pointer;
+        user-select: none;
+        background: none;
+      }
+
+      button,
+      a,
+      select {
+        touch-action: manipulation;
+      }
+
+      html {
+        font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        font-variation-settings: var(--font-weight-400);
+        font-optical-sizing: none;
+        font-feature-settings: "calt", "ccmp", "locl", "kern", "cv01", "ss03";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+        color: var(--text-primary);
+        background: var(--background-primary);
+        scroll-padding-block-start: var(--bar-height, 72px);
+      }
+
+      * {
+        scrollbar-width: none;
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      ::selection {
+        background: color-mix(in oklab, var(--accent) 28%, transparent);
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      p {
+        text-wrap: pretty;
+      }
+
+      @property --fade-start {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @property --fade-end {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+      }
+
+      @keyframes scroll-fade {
+        0% {
+          --fade-start: 0px;
+          --fade-end: 24px;
+        }
+        10% {
+          --fade-start: 24px;
+        }
+        90% {
+          --fade-end: 24px;
+        }
+        100% {
+          --fade-start: 24px;
+          --fade-end: 0px;
+        }
+      }
+
+      .page {
+        width: min(768px, 100% - var(--inset) * 2);
+        margin: 0 auto;
+        padding: 96px 0 128px;
+
+        @media (width <= 640px) {
+          --inset: 24px;
+          padding-top: 64px;
+        }
+      }
+
+      .head {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 640px;
+      }
+
+      .title {
+        font-variation-settings: var(--font-weight-500);
+        text-wrap: balance;
+      }
+
+      .brief {
+        color: var(--text-tertiary);
+      }
+
+      @property --bar-line {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: transparent;
+      }
+
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-top: 48px;
+        padding: 16px 0;
+        border-image: linear-gradient(to top, var(--bar-line) 1px, var(--background-primary) 1px) fill 0 / / 0 100vw;
+        transition: --bar-line var(--duration-snappy) var(--ease-out-cubic);
+
+        &[data-stuck] {
+          --bar-line: var(--border-primary);
+        }
+      }
+
+      .filters,
+      .picks {
+        display: flex;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .picks {
+        margin-left: auto;
+      }
+
+      .copy {
+        position: relative;
+        display: flex;
+      }
+
+      .toast {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        height: 32px;
+        padding: 0 12px;
+        font-size: 13px;
+        font-variation-settings: var(--font-weight-500);
+        color: var(--text-primary);
+        white-space: nowrap;
+        pointer-events: none;
+        background: var(--background-raised);
+        border: 1px solid transparent;
+        border-radius: 10px;
+        box-shadow: var(--shadow-raised);
+        opacity: 0;
+        translate: calc(-50% + var(--shift, 0px)) 4px;
+        scale: 0.97;
+        transform-origin: bottom center;
+        transition:
+          opacity var(--duration-exit) var(--ease-out-cubic),
+          translate var(--duration-exit) var(--ease-out-cubic),
+          scale var(--duration-exit) var(--ease-out-cubic);
+
+        &[data-side="below"] {
+          top: calc(100% + 8px);
+          bottom: auto;
+          translate: calc(-50% + var(--shift, 0px)) -4px;
+          transform-origin: top center;
+        }
+
+        &[data-open] {
+          opacity: 1;
+          translate: calc(-50% + var(--shift, 0px)) 0;
+          scale: 1;
+          transition-duration: var(--duration-snappy);
+        }
+      }
+
+      .select {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        min-width: 0;
+        max-width: 280px;
+        height: 28px;
+        padding: 0 28px 0 12px;
+        font-size: 13px;
+        font-variation-settings: var(--font-weight-500);
+        color: var(--text-primary);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+        appearance: none;
+        background: var(--background-tertiary) no-repeat right 11px center / 10px
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%236b6b65' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4l2.5 2.5L7.5 4'/%3E%3C/svg%3E");
+        border-radius: var(--radius-control);
+
+        &:active {
+          background-color: var(--background-hover);
+        }
+      }
+
+      @supports (appearance: base-select) {
+        .select,
+        .select::picker(select) {
+          appearance: base-select;
+        }
+
+        .select {
+          padding-right: 12px;
+          background-image: none;
+
+          &::picker-icon {
+            width: 10px;
+            height: 10px;
+            content: "";
+            background: var(--text-quaternary);
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4l2.5 2.5L7.5 4'/%3E%3C/svg%3E");
+            transition: rotate var(--duration-snappy) var(--ease-out-cubic);
+          }
+
+          &:open::picker-icon {
+            rotate: 180deg;
+          }
+
+          selectedcontent {
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          &::picker(select) {
+            min-width: anchor-size(width);
+            max-height: min(400px, 60dvh);
+            scrollbar-width: none;
+            padding: 4px;
+            margin-block: 8px;
+            background: var(--background-raised);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            box-shadow: var(--shadow-raised);
+            opacity: 0;
+            mask-image:
+              linear-gradient(to bottom, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent),
+              linear-gradient(black, black),
+              linear-gradient(black, black);
+            mask-clip: border-box, border-box, no-clip;
+            mask-size: 100% 100%, 100% 100%, calc(100% + 128px) calc(100% + 128px);
+            mask-position: 0 0, 0 0, -64px -64px;
+            mask-repeat: no-repeat;
+            mask-composite: add, exclude;
+            animation: scroll-fade linear both;
+            animation-timeline: scroll(self);
+            transition:
+              opacity var(--duration-exit) var(--ease-out-cubic),
+              display var(--duration-exit) allow-discrete,
+              overlay var(--duration-exit) allow-discrete;
+          }
+
+          &:open::picker(select) {
+            opacity: 1;
+            transition-duration: var(--duration-snappy);
+
+            @starting-style {
+              opacity: 0;
+            }
+          }
+        }
+
+        .select option {
+          display: flex;
+          gap: 6px;
+          align-items: center;
+          height: 28px;
+          padding: 0 8px;
+          font-size: 13px;
+          font-variation-settings: var(--font-weight-500);
+          color: var(--text-tertiary);
+          white-space: nowrap;
+          cursor: pointer;
+          border-radius: 8px;
+
+          &:focus-visible {
+            color: var(--text-primary);
+            background: var(--background-tertiary);
+            outline: none;
+          }
+
+          &:checked {
+            color: var(--text-primary);
+          }
+
+          &::checkmark {
+            order: 1;
+            margin-left: auto;
+            padding-left: 16px;
+            color: var(--accent);
+          }
+        }
+      }
+
+      .chip,
+      .action {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        height: 28px;
+        padding: 0 12px;
+        font-size: 13px;
+        font-variation-settings: var(--font-weight-500);
+        color: var(--text-tertiary);
+        white-space: nowrap;
+        border-radius: var(--radius-control);
+
+        &[aria-pressed="true"] {
+          color: var(--text-primary);
+          background: var(--background-tertiary);
+        }
+
+        &:active:not(:disabled) {
+          color: var(--text-primary);
+        }
+
+        &:disabled {
+          cursor: default;
+          opacity: 0.5;
+        }
+      }
+
+      .action {
+        color: var(--text-primary);
+        background: var(--background-tertiary);
+
+        &:active:not(:disabled) {
+          background: var(--background-hover);
+        }
+      }
+
+      .count {
+        color: var(--text-quaternary);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .groups {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+        margin-top: 32px;
+      }
+
+      .group-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 12px;
+        align-items: baseline;
+        margin-bottom: 20px;
+
+        .count {
+          margin-left: auto;
+        }
+      }
+
+      .group-title {
+        font-variation-settings: var(--font-weight-500);
+        text-wrap: balance;
+      }
+
+      .group-description {
+        color: var(--text-tertiary);
+      }
+
+      .cards {
+        position: relative;
+      }
+
+      .ref {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: var(--card-width);
+
+        &::after {
+          position: absolute;
+          inset: 0;
+          content: "";
+          border-radius: 10px;
+          box-shadow:
+            0 0 0 2px var(--background-primary),
+            0 0 0 4px var(--accent);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity var(--duration-snappy) var(--ease-out-cubic);
+        }
+
+        &[data-picked]::after {
+          opacity: 1;
+        }
+      }
+
+      .shot {
+        position: relative;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        aspect-ratio: 4 / 3;
+        cursor: zoom-in;
+        background: var(--background-tertiary);
+        border-radius: 10px;
+
+        &::after {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          content: "";
+          border-radius: inherit;
+          box-shadow: inset 0 0 0 1px var(--border-primary);
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .shot img {
+          transition:
+            opacity 0.6s var(--ease-out-quart),
+            filter 0.7s var(--ease-out-quart);
+
+          &:not([data-loaded]) {
+            opacity: 0;
+            filter: blur(6px);
+          }
+        }
+      }
+
+      .pick {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        color: var(--text-tertiary);
+        background: color-mix(in oklab, var(--background-primary) 82%, transparent);
+        border-radius: var(--radius-control);
+        box-shadow: var(--shadow-raised);
+        opacity: 0;
+        backdrop-filter: blur(8px);
+        transition: opacity var(--duration-snappy) var(--ease-out-cubic);
+
+        &::before {
+          position: absolute;
+          inset: -6px;
+          content: "";
+        }
+
+        &:active:not([aria-pressed="true"]) {
+          color: var(--text-primary);
+        }
+
+        &:focus-visible {
+          opacity: 1;
+        }
+
+        &[aria-pressed="true"] {
+          color: var(--text-on-accent);
+          background: var(--accent);
+          opacity: 1;
+        }
+
+        @media not ((hover: hover) and (pointer: fine)) {
+          opacity: 1;
+        }
+      }
+
+      .empty {
+        padding: 64px 0;
+        color: var(--text-tertiary);
+        text-align: center;
+      }
+
+      .viewer {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        color: var(--text-primary);
+        background: transparent;
+        backdrop-filter: blur(0);
+        transition:
+          background-color var(--duration-exit) var(--ease-out-cubic),
+          backdrop-filter var(--duration-exit) var(--ease-out-cubic),
+          display var(--duration-exit) allow-discrete,
+          overlay var(--duration-exit) allow-discrete;
+
+        grid-template-columns: 1fr 344px;
+
+        @media (width <= 900px) {
+          grid-template-rows: 1fr auto;
+          grid-template-columns: 1fr;
+        }
+
+        &[open] {
+          display: grid;
+          background: color-mix(in oklab, var(--background-primary) 92%, transparent);
+          backdrop-filter: blur(24px);
+          transition-duration: var(--duration-snappy);
+
+          @starting-style {
+            background: transparent;
+            backdrop-filter: blur(0);
+          }
+        }
+
+        &[open][data-closing] {
+          background: transparent;
+          backdrop-filter: blur(0);
+          transition-duration: var(--duration-exit);
+        }
+
+        &::backdrop {
+          background: transparent;
+        }
+      }
+
+      .stage {
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        min-height: 0;
+        padding: var(--inset);
+        cursor: zoom-out;
+
+        img {
+          max-height: calc(100dvh - var(--inset) * 2);
+          object-fit: contain;
+          cursor: default;
+          border-radius: 12px;
+          box-shadow: var(--shadow-raised);
+
+          @media (width <= 900px) {
+            max-height: calc(60dvh - var(--inset));
+          }
+        }
+      }
+
+      .panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        margin: 12px 12px 12px 0;
+        overflow: hidden;
+        background: var(--background-raised);
+        border: 1px solid transparent;
+        border-radius: 16px;
+        box-shadow: var(--shadow-floating);
+        opacity: 0;
+        transition: opacity var(--duration-exit) var(--ease-out-cubic);
+
+        .viewer[open] & {
+          opacity: 1;
+          transition-duration: var(--duration-snappy);
+          transition-delay: 60ms;
+
+          @starting-style {
+            opacity: 0;
+          }
+        }
+
+        .viewer[open][data-closing] & {
+          opacity: 0;
+          transition-duration: var(--duration-exit);
+          transition-delay: 0s;
+        }
+
+        @media (width <= 900px) {
+          max-height: calc(40dvh - 12px);
+          margin: 0 12px 12px;
+        }
+      }
+
+      .panel-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        min-height: 0;
+        padding: 16px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        mask-image:
+          linear-gradient(to bottom, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent),
+          linear-gradient(black, black),
+          linear-gradient(black, black);
+        mask-clip: border-box, border-box, no-clip;
+        mask-size: 100% 100%, 100% 100%, calc(100% + 128px) calc(100% + 128px);
+        mask-position: 0 0, 0 0, -64px -64px;
+        mask-repeat: no-repeat;
+        mask-composite: add, exclude;
+        animation: scroll-fade linear both;
+        animation-timeline: scroll(self);
+      }
+
+      .panel-top,
+      .panel-tools {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .panel-top {
+        justify-content: space-between;
+      }
+
+      .icon-button {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        color: var(--text-tertiary);
+        background: var(--background-tertiary);
+        border-radius: var(--radius-control);
+
+        &::before {
+          position: absolute;
+          inset: -4px;
+          content: "";
+        }
+
+        &:active:not(:disabled, [aria-pressed="true"]) {
+          color: var(--text-primary);
+          background: var(--background-hover);
+        }
+
+        &:disabled {
+          cursor: default;
+          opacity: 0.4;
+        }
+
+        &[aria-pressed="true"] {
+          color: var(--text-on-accent);
+          background: var(--accent);
+        }
+      }
+
+      .panel-head {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .panel-group {
+        color: var(--text-tertiary);
+      }
+
+      .panel-title {
+        font-variation-settings: var(--font-weight-500);
+        text-wrap: balance;
+      }
+
+      .panel-note {
+        margin-top: 10px;
+        color: var(--text-secondary);
+        text-wrap: pretty;
+      }
+
+      .panel-count {
+        margin-top: 10px;
+        color: var(--text-quaternary);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .detail {
+        display: flex;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 6px 0;
+
+        & + & {
+          border-top: 1px solid var(--border-primary);
+        }
+
+        dt {
+          flex: none;
+          color: var(--text-tertiary);
+        }
+
+        dd {
+          min-width: 0;
+          text-align: right;
+          overflow-wrap: anywhere;
+
+          span + span::before {
+            content: ", ";
+          }
+        }
+
+        a {
+          display: inline-flex;
+          gap: 4px;
+          align-items: center;
+
+          svg {
+            color: var(--text-quaternary);
+          }
+
+          &:active svg {
+            color: var(--text-primary);
+          }
+        }
+      }
+
+      @media (width <= 640px) {
+        .select,
+        input:not([type="range"]),
+        textarea {
+          font-size: 16px;
+        }
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .select:hover {
+          background-color: var(--background-hover);
+        }
+
+        .chip:hover:not(:disabled) {
+          color: var(--text-primary);
+        }
+
+        .action:hover:not(:disabled) {
+          background: var(--background-hover);
+        }
+
+        .icon-button:hover:not(:disabled, [aria-pressed="true"]) {
+          color: var(--text-primary);
+          background: var(--background-hover);
+        }
+
+        .select option:hover {
+          color: var(--text-primary);
+          background: var(--fill-hover);
+        }
+
+        .ref:hover .pick {
+          opacity: 1;
+        }
+
+        .pick:hover:not([aria-pressed="true"]) {
+          color: var(--text-primary);
+        }
+
+        .detail a:hover svg {
+          color: var(--text-primary);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after,
+        ::backdrop {
+          transition-duration: 0s !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="head">
+        <h1 class="title" id="title"></h1>
+        <p class="brief" id="brief"></p>
+      </header>
+
+      <nav class="bar" id="bar" aria-label="Filters">
+        <div class="filters">
+          <select class="select" id="group-filter" aria-label="Group"></select>
+          <select class="select" id="source-filter" aria-label="Source"></select>
+        </div>
+        <div class="picks">
+          <button class="chip" id="picked-only" type="button" aria-pressed="false"></button>
+          <span class="copy">
+            <button class="action" id="copy" type="button" title="Copy Picks (⇧C)" aria-keyshortcuts="Shift+C" disabled>Copy Picks</button>
+            <output class="toast" id="copy-toast"></output>
+          </span>
+        </div>
+      </nav>
+
+      <main class="groups" id="groups"></main>
+    </div>
+
+    <dialog class="viewer" id="viewer" aria-label="Reference">
+      <div class="stage" id="stage"><img id="viewer-image" alt="" /></div>
+      <aside class="panel">
+        <div class="panel-scroll">
+          <div class="panel-top">
+            <button class="icon-button" id="viewer-close" type="button" aria-label="Close" title="Close (Esc)">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+            </button>
+            <div class="panel-tools">
+              <button class="icon-button" id="viewer-pick" type="button" aria-pressed="false"></button>
+              <button class="icon-button" id="viewer-prev" type="button" aria-label="Previous" title="Previous (K)">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 8h-9M7 4.5L3.5 8 7 11.5" /></svg>
+              </button>
+              <button class="icon-button" id="viewer-next" type="button" aria-label="Next" title="Next (J)">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8h9M9 4.5L12.5 8 9 11.5" /></svg>
+              </button>
+            </div>
+          </div>
+          <header class="panel-head">
+            <span class="panel-group" id="viewer-group"></span>
+            <h2 class="panel-title" id="viewer-title"></h2>
+            <p class="panel-note" id="viewer-note"></p>
+            <span class="panel-count" id="viewer-count"></span>
+          </header>
+          <dl id="viewer-details"></dl>
+        </div>
+      </aside>
+    </dialog>
+
+    <script src="board.js"></script>
+    <script>
+      const board = window.board;
+      const storageKey = `gather:${location.pathname}`;
+      const picked = new Set(JSON.parse(localStorage.getItem(storageKey) || "[]"));
+      const filters = { group: null, source: null, pickedOnly: false };
+      const $ = (id) => document.getElementById(id);
+
+      const check = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7" /></svg>`;
+      const external = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 4.5h6v6M11.5 4.5l-7 7" /></svg>`;
+      function h(tag, props = {}, ...children) {
+        const node = document.createElement(tag);
+        for (const [key, value] of Object.entries(props)) {
+          if (key === "html") node.innerHTML = value;
+          else if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
+          else node.setAttribute(key, value);
+        }
+        node.append(...children.filter((child) => child != null));
+        return node;
+      }
+
+      const items = board.groups.flatMap((group, index) =>
+        group.items.map((item) => ({ ...item, group: index })),
+      );
+      const sources = [...new Set(items.map((item) => item.source))];
+
+      document.title = `${board.title} · Gather`;
+      $("title").textContent = board.title;
+      $("brief").textContent = board.brief;
+      function isVisible(item) {
+        return (
+          (filters.group === null || item.group === filters.group) &&
+          (filters.source === null || item.source === filters.source) &&
+          (!filters.pickedOnly || picked.has(item.url))
+        );
+      }
+
+      function option(value, label, count) {
+        return h("option", { value }, label, " ", h("span", { class: "count" }, String(count)));
+      }
+
+      $("group-filter").append(
+        option("", "All Groups", items.length),
+        ...board.groups.map((group, index) => option(index, group.title, group.items.length)),
+      );
+      $("source-filter").append(
+        option("", "All Sources", items.length),
+        ...sources.map((source) =>
+          option(source, source, items.filter((item) => item.source === source).length),
+        ),
+      );
+      $("group-filter").addEventListener("change", (event) =>
+        setFilter("group", event.target.value === "" ? null : Number(event.target.value)),
+      );
+      $("source-filter").addEventListener("change", (event) =>
+        setFilter("source", event.target.value || null),
+      );
+
+      function renderPicks() {
+        const count = items.filter((item) => picked.has(item.url)).length;
+        const pickedOnly = $("picked-only");
+        pickedOnly.setAttribute("aria-pressed", String(filters.pickedOnly));
+        pickedOnly.replaceChildren("Picked", h("span", { class: "count" }, String(count)));
+        $("copy").disabled = count === 0;
+      }
+
+      function setFilter(key, value) {
+        filters[key] = value;
+        renderPicks();
+        layout();
+        writeHash();
+      }
+
+      function loaded(image) {
+        return new Promise((resolve, reject) => {
+          image.addEventListener("load", resolve, { once: true });
+          image.addEventListener("error", reject, { once: true });
+        });
+      }
+
+      for (const item of items) {
+        const image = h("img", { src: item.image, alt: "", decoding: "async" });
+        item.ratio = 4 / 3;
+        item.shot = h(
+          "button",
+          { class: "shot", type: "button", "aria-label": `View ${item.title}`, onclick: () => openViewer(item) },
+          image,
+        );
+        item.pick = h("button", {
+          class: "pick",
+          type: "button",
+          html: check,
+          onclick: () => togglePick(item),
+        });
+        item.node = h("figure", { class: "ref" }, item.shot, item.pick);
+        image
+          .decode()
+          .catch(() => (image.complete ? (image.naturalWidth ? undefined : Promise.reject()) : loaded(image)))
+          .then(() => {
+            item.ratio = image.naturalWidth / image.naturalHeight;
+            item.shot.style.aspectRatio = `${image.naturalWidth} / ${image.naturalHeight}`;
+            image.setAttribute("data-loaded", "");
+            scheduleLayout();
+          })
+          .catch(() => {});
+        renderPick(item);
+      }
+
+      const sections = board.groups.map((group, index) => {
+        const members = items.filter((item) => item.group === index);
+        const count = h("span", { class: "count" });
+        const cards = h("div", { class: "cards" }, ...members.map((item) => item.node));
+        const node = h(
+          "section",
+          { class: "group" },
+          h(
+            "header",
+            { class: "group-head" },
+            h("h2", { class: "group-title" }, group.title),
+            group.description ? h("p", { class: "group-description" }, group.description) : null,
+            count,
+          ),
+          cards,
+        );
+        $("groups").append(node);
+        return { node, count, cards, members };
+      });
+      const empty = h("p", { class: "empty", hidden: "" });
+      $("groups").append(empty);
+
+      function nearest(item) {
+        const index = items.indexOf(item);
+        return items.slice(index).find(isVisible) ?? items.slice(0, index).findLast(isVisible) ?? null;
+      }
+
+      function focusNear(item, options) {
+        const target = nearest(item);
+        (target ? target.shot : $("group-filter")).focus(options);
+        return target;
+      }
+
+      let width = 0;
+
+      function layout() {
+        const focused = items.find((item) => item.node.contains(document.activeElement));
+        const root = getComputedStyle(document.documentElement);
+        const column = parseFloat(root.getPropertyValue("--column"));
+        const gap = parseFloat(root.getPropertyValue("--gap"));
+        width = $("groups").clientWidth;
+        const columns = Math.min(3, Math.max(1, Math.floor((width + gap) / (column + gap))));
+        const cardWidth = (width - gap * (columns - 1)) / columns;
+        let shown = 0;
+        for (const section of sections) {
+          const heights = Array(columns).fill(0);
+          let visible = 0;
+          for (const item of section.members) {
+            item.node.hidden = !isVisible(item);
+            if (item.node.hidden) continue;
+            const shortest = heights.indexOf(Math.min(...heights));
+            item.node.style.translate = `${shortest * (cardWidth + gap)}px ${heights[shortest]}px`;
+            heights[shortest] += cardWidth / item.ratio + gap;
+            visible += 1;
+          }
+          section.node.hidden = visible === 0;
+          section.count.textContent = String(visible);
+          section.cards.style.setProperty("--card-width", `${cardWidth}px`);
+          section.cards.style.height = `${Math.max(0, Math.max(...heights) - gap)}px`;
+          shown += visible;
+        }
+        const nothingPicked = !items.some((item) => picked.has(item.url));
+        empty.textContent = filters.pickedOnly && nothingPicked ? "Nothing Picked Yet" : "No References Match";
+        empty.hidden = shown > 0;
+        if (focused && !isVisible(focused)) focusNear(focused);
+      }
+
+      let pending = 0;
+
+      function scheduleLayout() {
+        if (pending) return;
+        pending = requestAnimationFrame(() => {
+          pending = 0;
+          layout();
+        });
+      }
+
+      new ResizeObserver(() => {
+        if ($("groups").clientWidth !== width) layout();
+      }).observe($("groups"));
+
+      function save() {
+        localStorage.setItem(storageKey, JSON.stringify([...picked]));
+      }
+
+      function renderPick(item) {
+        const isPicked = picked.has(item.url);
+        const label = isPicked ? "Unpick" : "Pick";
+        item.node.toggleAttribute("data-picked", isPicked);
+        item.pick.setAttribute("aria-pressed", String(isPicked));
+        item.pick.setAttribute("aria-label", `${label} ${item.title}`);
+        item.pick.title = `${label} (P)`;
+      }
+
+      function togglePick(item) {
+        if (picked.has(item.url)) picked.delete(item.url);
+        else picked.add(item.url);
+        save();
+        renderPick(item);
+        renderPicks();
+        if (viewer.open && current === item) renderViewer();
+        if (filters.pickedOnly && !viewer.open) layout();
+      }
+
+      $("picked-only").addEventListener("click", () => setFilter("pickedOnly", !filters.pickedOnly));
+
+      const bar = $("bar");
+      const markStuck = () => bar.toggleAttribute("data-stuck", bar.getBoundingClientRect().top <= 0);
+      addEventListener("scroll", markStuck, { passive: true });
+      markStuck();
+      new ResizeObserver(() => {
+        document.documentElement.style.setProperty("--bar-height", `${bar.offsetHeight + 8}px`);
+      }).observe(bar);
+
+      async function copyPicks() {
+        const picks = items.filter((item) => picked.has(item.url));
+        if (picks.length === 0) return;
+        const lines = picks.map((item, index) =>
+          [`${index + 1}. ${item.title}, ${item.source}`, `   ${item.note}`, `   ${item.url}`].join("\n"),
+        );
+        const lead = picks.length === 1 ? "Pick this reference" : `Pick these ${picks.length} references`;
+        const text = `${lead} from ${board.title}:\n\n${lines.join("\n\n")}\n`;
+        const tokens = Math.ceil(text.length / 4).toLocaleString();
+        const toast = $("copy-toast");
+        toast.textContent = await navigator.clipboard.writeText(text).then(
+          () => `Copied · ~${tokens} tokens`,
+          () => "Copy Failed",
+        );
+        const button = $("copy").getBoundingClientRect();
+        const center = button.left + button.width / 2;
+        const half = toast.offsetWidth / 2;
+        const edge = document.documentElement.clientWidth - 8;
+        const shift = Math.min(0, edge - center - half) + Math.max(0, 8 - center + half);
+        toast.style.setProperty("--shift", `${shift}px`);
+        toast.dataset.side = button.top < 48 ? "below" : "above";
+        toast.dataset.open = "";
+        clearTimeout(toast.hide);
+        toast.hide = setTimeout(() => delete toast.dataset.open, 1600);
+      }
+
+      $("copy").addEventListener("click", copyPicks);
+
+      const viewer = $("viewer");
+      $("viewer-pick").innerHTML = check;
+      let sequence = [];
+      let current = null;
+
+      const motion = matchMedia("(prefers-reduced-motion: no-preference)");
+      const easeOutQuart = "cubic-bezier(0.165, 0.84, 0.44, 1)";
+      let flight = null;
+
+      function thumbnail(item) {
+        const rect = item.shot.getBoundingClientRect();
+        return rect.bottom > 0 && rect.top < innerHeight ? rect : null;
+      }
+
+      function thumbnailFrame(image, rect) {
+        const to = image.getBoundingClientRect();
+        const scale = rect.width / to.width;
+        const x = rect.left + rect.width / 2 - (to.left + to.width / 2);
+        const y = rect.top + rect.height / 2 - (to.top + to.height / 2);
+        return { transform: `translate(${x}px, ${y}px) scale(${scale})`, borderRadius: `${10 / scale}px` };
+      }
+
+      async function openViewer(item) {
+        if (viewer.open) return;
+        sequence = items.filter(isVisible);
+        current = item;
+        renderViewer();
+        flight?.cancel();
+        const image = $("viewer-image");
+        const rect = motion.matches && thumbnail(item);
+        image.style.opacity = rect ? "0" : "";
+        viewer.showModal();
+        writeHash();
+        if (!rect) return;
+        await image.decode().catch(() => {});
+        image.style.opacity = "";
+        flight = image.animate([thumbnailFrame(image, rect), { transform: "none", borderRadius: "12px" }], {
+          duration: 240,
+          easing: easeOutQuart,
+        });
+      }
+
+      async function closeViewer() {
+        if (!viewer.open || viewer.hasAttribute("data-closing")) return;
+        flight?.cancel();
+        const image = $("viewer-image");
+        const rect = motion.matches && thumbnail(current);
+        if (!rect) return viewer.close();
+        viewer.setAttribute("data-closing", "");
+        flight = image.animate([{}, thumbnailFrame(image, rect)], { duration: 240, easing: easeOutQuart, fill: "forwards" });
+        await flight.finished.catch(() => {});
+        viewer.style.transition = "none";
+        viewer.close();
+        viewer.removeAttribute("data-closing");
+        flight.cancel();
+        requestAnimationFrame(() => viewer.style.removeProperty("transition"));
+      }
+
+      function renderViewer() {
+        const index = sequence.indexOf(current);
+        const isPicked = picked.has(current.url);
+        $("viewer-image").src = current.image;
+        $("viewer-image").alt = current.title;
+        $("viewer-count").textContent = `${index + 1} of ${sequence.length}`;
+        $("viewer-group").textContent = board.groups[current.group].title;
+        $("viewer-title").textContent = current.title;
+        $("viewer-note").textContent = current.note;
+
+        const original = h("a", { href: current.url, target: "_blank", rel: "noreferrer", html: external });
+        original.prepend(new URL(current.url).hostname.replace(/^www\./, ""));
+        const rows = [["Source", current.source], ["Original", original], ...Object.entries(current.details ?? {})];
+        $("viewer-details").replaceChildren(
+          ...rows.map(([label, value]) =>
+            h(
+              "div",
+              { class: "detail" },
+              h("dt", {}, label),
+              h("dd", {}, ...[value].flat().map((part) => (typeof part === "string" ? h("span", {}, part) : part))),
+            ),
+          ),
+        );
+
+        const pick = $("viewer-pick");
+        const label = isPicked ? "Unpick" : "Pick";
+        pick.setAttribute("aria-pressed", String(isPicked));
+        pick.setAttribute("aria-label", label);
+        pick.title = `${label} (P)`;
+        $("viewer-prev").disabled = index <= 0;
+        $("viewer-next").disabled = index === sequence.length - 1;
+      }
+
+      function step(offset) {
+        const next = sequence[sequence.indexOf(current) + offset];
+        if (!next) return;
+        current = next;
+        renderViewer();
+        writeHash();
+      }
+
+      $("viewer-prev").addEventListener("click", () => step(-1));
+      $("viewer-next").addEventListener("click", () => step(1));
+      $("viewer-pick").addEventListener("click", () => togglePick(current));
+      $("viewer-close").addEventListener("click", closeViewer);
+      $("stage").addEventListener("click", (event) => {
+        if (event.target === event.currentTarget) closeViewer();
+      });
+      viewer.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closeViewer();
+      });
+
+      viewer.addEventListener("close", () => {
+        if (filters.pickedOnly) layout();
+        writeHash();
+        if (!current) return;
+        const target = focusNear(current, { preventScroll: true });
+        target?.shot.scrollIntoView({ block: "nearest", behavior: motion.matches ? "smooth" : "auto" });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.metaKey || event.ctrlKey || event.altKey) return;
+        if (event.key === "Escape" && viewer.open) {
+          event.preventDefault();
+          closeViewer();
+          return;
+        }
+        if (event.target.closest("input, textarea, select, [contenteditable]")) return;
+        if (event.shiftKey) {
+          if (event.code !== "KeyC" || viewer.open) return;
+          event.preventDefault();
+          copyPicks();
+          return;
+        }
+        const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+        if (viewer.open) {
+          if (key === "j" || key === "ArrowDown" || key === "ArrowRight") step(1);
+          else if (key === "k" || key === "ArrowUp" || key === "ArrowLeft") step(-1);
+          else if (key === "p") togglePick(current);
+          else if (key === "o") window.open(current.url, "_blank", "noreferrer");
+          else return;
+        } else {
+          const item = items.find((item) => item.node.contains(event.target));
+          if (key !== "p" || !item) return;
+          togglePick(item);
+        }
+        event.preventDefault();
+      });
+
+      function writeHash() {
+        const params = new URLSearchParams();
+        if (filters.group !== null) params.set("group", String(filters.group));
+        if (filters.source !== null) params.set("source", filters.source);
+        if (filters.pickedOnly) params.set("picked", "1");
+        if (viewer.open && current) params.set("item", current.url);
+        const hash = params.toString();
+        history.replaceState(null, "", hash ? `#${hash}` : location.pathname + location.search);
+      }
+
+      function readHash() {
+        const params = new URLSearchParams(location.hash.slice(1));
+        const group = Number(params.get("group"));
+        const source = params.get("source");
+        filters.group = params.has("group") && Number.isInteger(group) && board.groups[group] ? group : null;
+        filters.source = sources.includes(source) ? source : null;
+        filters.pickedOnly = params.get("picked") === "1";
+        $("group-filter").value = filters.group ?? "";
+        $("source-filter").value = filters.source ?? "";
+        return items.find((item) => item.url === params.get("item") && isVisible(item));
+      }
+
+      const opened = readHash();
+      renderPicks();
+      layout();
+      if (opened) openViewer(opened);
+    </script>
+  </body>
+</html>

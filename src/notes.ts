@@ -90,7 +90,7 @@ const ITEMS: readonly Item[] = [
     },
     {
         title: "Skills", source: "Agent skills", url: "", category: "snippets", kind: "skills",
-        description: "Install agent skills from Benji, Emil, and Jakub.",
+        description: "Install agent skills from Emil, Jakub, Raphael, and Benji.",
     },
     {
         title: "Transitions", source: "transitions.dev", url: "https://transitions.dev/", category: "resources",
@@ -421,6 +421,7 @@ function renderNote(item: Item): HTMLElement {
         const commands = [
             { name: 'Emil', command: 'npx skills@latest add emilkowalski/skills' },
             { name: 'Jakub', command: 'npx skills add jakubkrehel/skills' },
+            { name: 'Raphael', command: 'npx skills add raphaelsalaja/skills' },
             { name: 'Benji', command: 'npx skills add benjitaylor/skills --skill stageshow' },
         ];
         card.classList.add('skills-card');
@@ -445,7 +446,7 @@ function renderNote(item: Item): HTMLElement {
         tabs.forEach((tab, i) => {
             tab.addEventListener('click', () => select(i));
             tab.addEventListener('keydown', event => {
-                const index = event.key === 'ArrowRight' ? (i + 1) % 3 : event.key === 'ArrowLeft' ? (i + 2) % 3 : event.key === 'Home' ? 0 : event.key === 'End' ? 2 : -1;
+                const index = event.key === 'ArrowRight' ? (i + 1) % commands.length : event.key === 'ArrowLeft' ? (i + commands.length - 1) % commands.length : event.key === 'Home' ? 0 : event.key === 'End' ? commands.length - 1 : -1;
                 if (index < 0) return;
                 event.preventDefault(); select(index); tabs[index].focus();
             });
