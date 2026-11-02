@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#fafafa" />
+        <meta name="color-scheme" content="light" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
         <title>Notes · George Mocreac</title>
         <link rel="canonical" href="https://mocreac.com/notes/" />
         <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
@@ -81,7 +83,7 @@
                 --sand-950: #0B0B0B;
             }
 
-            html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+            html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scrollbar-gutter: stable; }
             body {
                 font-family: "Onest", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
                 letter-spacing: -0.02em;
@@ -104,11 +106,24 @@
                     background-color 220ms ease,
                     box-shadow 220ms ease;
             }
-            .pill:hover { transform: translateY(-1px); }
+            @media (hover: hover) and (pointer: fine) {
+                .pill:hover {
+                    transform: translateY(-1px);
+                }
+            }
             .pill-primary { background: #000; color: white; }
-            .pill-primary:hover { background: var(--sand-900); box-shadow: 0 8px 20px -8px rgba(0,0,0,0.45); }
+            @media (hover: hover) and (pointer: fine) {
+                .pill-primary:hover {
+                    background: var(--sand-900);
+                    box-shadow: 0 8px 20px -8px rgba(0,0,0,0.45);
+                }
+            }
             .pill-secondary { background-color: var(--sand-200); color: rgb(17 24 39); }
-            .pill-secondary:hover { background-color: var(--sand-300); }
+            @media (hover: hover) and (pointer: fine) {
+                .pill-secondary:hover {
+                    background-color: var(--sand-300);
+                }
+            }
 
             /* ────────── Layout ────────── */
             .shell {
@@ -146,7 +161,12 @@
                 -webkit-tap-highlight-color: transparent;
                 line-height: 1;
             }
-            .tab:hover { border-color: var(--sand-500); color: var(--sand-900); }
+            @media (hover: hover) and (pointer: fine) {
+                .tab:hover {
+                    border-color: var(--sand-500);
+                    color: var(--sand-900);
+                }
+            }
             .tab:active { transform: scale(0.96); }
             .tab.is-active {
                 background: var(--sand-900);
@@ -157,9 +177,15 @@
             .tab-count {
                 font-family: "Onest", ui-sans-serif, system-ui, sans-serif;
                 font-variant-numeric: normal;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 1ch;
                 color: var(--sand-400);
-                font-size: 12px;
+                font-size: inherit;
                 font-weight: 500;
+                line-height: 1;
+                font-variant-numeric: lining-nums tabular-nums;
             }
 
             /* ────────── Grid ────────── */
@@ -168,6 +194,8 @@
                 grid-template-columns: minmax(0, 1fr);
                 grid-auto-rows: 1px;
                 column-gap: 16px;
+                align-content: start;
+                overflow-anchor: none;
             }
             @media (min-width: 640px) {
                 .notes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -193,7 +221,7 @@
                     box-shadow 460ms cubic-bezier(0.16, 1, 0.3, 1);
 
             }
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .curation-card[href]:hover {
                     transform: translateY(-6px);
                     box-shadow:
@@ -328,7 +356,11 @@
             a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--sand-700); outline-offset: 4px; }
             @media (prefers-reduced-motion: reduce) {
                 .curation-card, .curation-banner img, .curation-arrow, .tab, .pill { transition: none; }
-                .curation-card[href]:hover { transform: none; }
+            @media (hover: hover) and (pointer: fine) {
+                .curation-card[href]:hover {
+                    transform: none;
+                }
+            }
             }
 
             /* ────────── Empty state ────────── */
@@ -387,6 +419,7 @@
             }
         </style>
         <link rel="stylesheet" href="/src/corners.css" />
+        <link rel="stylesheet" href="/src/mobile.css" />
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 min-h-screen flex flex-col">
         <header class="py-6 flex items-center gap-4 max-w-[912px] w-full mx-auto">

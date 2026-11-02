@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#fafafa" />
+        <meta name="color-scheme" content="light" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
         <title>George Mocreac, Product & Brand Designer</title>
         <link rel="canonical" href="https://mocreac.com/" />
         <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
@@ -235,9 +237,11 @@
                     background-color 220ms ease,
                     transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
             }
-            .card-cta:hover {
-                background: var(--sand-300);
-                transform: translateY(-1px);
+            @media (hover: hover) and (pointer: fine) {
+                .card-cta:hover {
+                    background: var(--sand-300);
+                    transform: translateY(-1px);
+                }
             }
 
             /* Multi-CTA row (used by the Agimut card) */
@@ -887,7 +891,7 @@
 
 
             /* Hover: card lifts, content morphs in */
-            @media (hover: hover) {
+            @media (hover: hover) and (pointer: fine) {
                 .card:hover {
                     background: white;
                     box-shadow:
@@ -914,7 +918,7 @@
                second tap on its CTA performs the action (wired up in cards.ts).
                The card itself isn't lifted/scaled here (it's full-width on
                mobile, so a scale would overflow); only the inner content shifts. */
-            @media (hover: none) {
+            @media (hover: none), (pointer: coarse) {
                 .card-expanded { max-height: 0; opacity: 0; }
                 .card.is-expanded {
                     background: #fff;
@@ -940,11 +944,24 @@
                     background-color 220ms ease,
                     box-shadow 220ms ease;
             }
-            .pill:hover { transform: translateY(-1px); }
+            @media (hover: hover) and (pointer: fine) {
+                .pill:hover {
+                    transform: translateY(-1px);
+                }
+            }
             .pill-primary { background: #000; color: white; }
-            .pill-primary:hover { background: var(--sand-900); box-shadow: 0 8px 20px -8px rgba(0,0,0,0.45); }
+            @media (hover: hover) and (pointer: fine) {
+                .pill-primary:hover {
+                    background: var(--sand-900);
+                    box-shadow: 0 8px 20px -8px rgba(0,0,0,0.45);
+                }
+            }
             .pill-secondary { background-color: var(--sand-200); color: rgb(17 24 39); }
-            .pill-secondary:hover { background-color: var(--sand-300); }
+            @media (hover: hover) and (pointer: fine) {
+                .pill-secondary:hover {
+                    background-color: var(--sand-300);
+                }
+            }
 
             /* ────────── Email popover ────────── */
             /* Email pill becomes a trigger; clicking opens a panel below it
@@ -963,18 +980,29 @@
                 border: 0;
                 font-family: inherit;
             }
+
             /* Hover bridge — fills the gap between trigger and panel so the
                cursor can move down to the options without losing :hover on
                the parent and snapping the menu shut. Lives on the trigger
                (not the panel) so it stays hoverable while the panel is
                still in its closed/invisible state. */
-            .email-trigger::after {
+.email-trigger::after {
                 content: '';
                 position: absolute;
                 left: -12px;
                 right: -12px;
                 bottom: -14px;
                 height: 14px;
+            }
+            @media (hover: hover) and (pointer: fine) {
+                {
+                    content: '';
+                    position: absolute;
+                    left: -12px;
+                    right: -12px;
+                    bottom: -14px;
+                    height: 14px;
+                }
             }
             .email-trigger:focus-visible {
                 outline: 2px solid var(--sand-400);
@@ -1009,13 +1037,21 @@
                     filter 220ms cubic-bezier(0.16, 1, 0.3, 1) 180ms;
                 will-change: opacity, transform, filter;
             }
-            .email-popover[data-state="open"] .email-panel,
-            .email-popover:hover .email-panel {
+.email-popover[data-state="open"] .email-panel {
                 opacity: 1;
                 transform: translateY(0) scale(1);
                 filter: blur(0);
                 pointer-events: auto;
                 transition-delay: 0ms;
+            }
+            @media (hover: hover) and (pointer: fine) {
+                .email-popover:hover .email-panel {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                    filter: blur(0);
+                    pointer-events: auto;
+                    transition-delay: 0ms;
+                }
             }
 
             /* Option rows are full-pill (border-radius: 999px) so they
@@ -1049,22 +1085,39 @@
                     background-color 180ms ease,
                     color 180ms ease;
             }
-            .email-popover[data-state="open"] .email-option,
-            .email-popover:hover .email-option {
+.email-popover[data-state="open"] .email-option {
                 opacity: 1;
                 transform: translateY(0);
                 filter: blur(0);
             }
-            .email-popover[data-state="open"] .email-option:nth-child(1),
-            .email-popover:hover .email-option:nth-child(1) { transition-delay: 60ms, 60ms, 60ms, 0ms, 0ms; }
-            .email-popover[data-state="open"] .email-option:nth-child(2),
-            .email-popover:hover .email-option:nth-child(2) { transition-delay: 120ms, 120ms, 120ms, 0ms, 0ms; }
-            .email-popover[data-state="open"] .email-option:nth-child(4),
-            .email-popover:hover .email-option:nth-child(4) { transition-delay: 200ms, 200ms, 200ms, 0ms, 0ms; }
-
-            .email-option:hover {
-                background: rgba(255, 255, 255, 0.08);
-                color: #fff;
+            @media (hover: hover) and (pointer: fine) {
+                .email-popover:hover .email-option {
+                    opacity: 1;
+                    transform: translateY(0);
+                    filter: blur(0);
+                }
+            }
+.email-popover[data-state="open"] .email-option:nth-child(1) { transition-delay: 60ms, 60ms, 60ms, 0ms, 0ms; }
+            @media (hover: hover) and (pointer: fine) {
+                .email-popover:hover .email-option:nth-child(1) {
+                    transition-delay: 60ms, 60ms, 60ms, 0ms, 0ms;
+                }
+            }
+.email-popover[data-state="open"] .email-option:nth-child(2) { transition-delay: 120ms, 120ms, 120ms, 0ms, 0ms; }
+            @media (hover: hover) and (pointer: fine) {
+                .email-popover:hover .email-option:nth-child(2) {
+                    transition-delay: 120ms, 120ms, 120ms, 0ms, 0ms;
+                }
+            }
+.email-popover[data-state="open"] .email-option:nth-child(4) { transition-delay: 200ms, 200ms, 200ms, 0ms, 0ms; }
+            @media (hover: hover) and (pointer: fine) {
+                .email-popover:hover .email-option:nth-child(4) {
+                    transition-delay: 200ms, 200ms, 200ms, 0ms, 0ms;
+                }
+                .email-option:hover {
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #fff;
+                }
             }
             .email-option:focus-visible {
                 outline: none;
@@ -1072,8 +1125,12 @@
                 box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.22);
                 color: #fff;
             }
-            .email-popover[data-state="open"] .email-option:active,
-            .email-popover:hover .email-option:active { transform: scale(0.96); }
+.email-popover[data-state="open"] .email-option:active { transform: scale(0.96); }
+            @media (hover: hover) and (pointer: fine) {
+                .email-popover:hover .email-option:active {
+                    transform: scale(0.96);
+                }
+            }
 
             .email-option-icon {
                 display: inline-flex;
@@ -1084,9 +1141,13 @@
                 flex-shrink: 0;
                 color: rgba(255, 255, 255, 0.9);
             }
-            .email-option:hover .email-option-icon,
-            .email-option:focus-visible .email-option-icon {
+.email-option:focus-visible .email-option-icon {
                 color: #fff;
+            }
+            @media (hover: hover) and (pointer: fine) {
+                .email-option:hover .email-option-icon {
+                    color: #fff;
+                }
             }
             .email-option-icon-swap {
                 position: relative;
@@ -1145,8 +1206,10 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
-            .email-option-copy:hover .email-option-label-text {
-                color: #fff;
+            @media (hover: hover) and (pointer: fine) {
+                .email-option-copy:hover .email-option-label-text {
+                    color: #fff;
+                }
             }
             .email-option-copy .email-option-label-copied {
                 color: #22C55E;
@@ -1176,11 +1239,17 @@
                     transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
                     color 200ms ease;
             }
-            .email-option:hover .email-option-arrow,
-            .email-option:focus-visible .email-option-arrow {
+.email-option:focus-visible .email-option-arrow {
                 opacity: 1;
                 transform: translate(0, 0);
                 color: rgba(255, 255, 255, 0.75);
+            }
+            @media (hover: hover) and (pointer: fine) {
+                .email-option:hover .email-option-arrow {
+                    opacity: 1;
+                    transform: translate(0, 0);
+                    color: rgba(255, 255, 255, 0.75);
+                }
             }
 
             .email-divider {
@@ -1266,6 +1335,7 @@
             }
         </style>
         <link rel="stylesheet" href="/src/corners.css" />
+        <link rel="stylesheet" href="/src/mobile.css" />
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 font-sans min-h-screen flex flex-col">
         <main class="flex-1 flex flex-col items-center justify-center px-3 sm:px-4">
