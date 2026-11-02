@@ -8,3 +8,9 @@
     .progress-seg, .progress-seg::after,
     .online-status-dot, .agimut-terminal-dot { corner-shape: round; }
 }
+
+/* Quiet native scrollbars across every page and scrollable container. */
+html, * {
+    scrollbar-width: thin;
+    scrollbar-color: gray transparent;
+}

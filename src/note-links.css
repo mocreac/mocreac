@@ -1,0 +1,21 @@
+.note-title-link { appearance:none; background:none; border:0; padding:0; margin:0; font:inherit; letter-spacing:inherit; line-height:inherit; color:inherit; text-align:inherit; cursor:pointer; }
+.note-title-link:focus-visible { outline:2px solid #FF2E01; outline-offset:4px; border-radius:3px; }
+.curation-card { position:relative; scroll-margin-top:28px; }
+.note-link-elevation { position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; box-shadow:0 8px 16px -8px rgb(0 0 0 / .15),0 24px 48px -24px rgb(0 0 0 / .25); }
+.note-link-rim { position:absolute; inset:0; border-radius:inherit; overflow:hidden; pointer-events:none; opacity:0; transition:opacity 200ms ease; z-index:2; }
+.is-link-highlighted > .note-link-rim { opacity:1; }
+.note-link-rim svg { display:block; opacity:.7; }
+.note-link-rim rect { animation:none; }
+@keyframes note-rim-dash { from { stroke-dashoffset:0; } to { stroke-dashoffset:-100; } }
+.note-link-notice { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); padding:10px 16px; border:1px solid #ddd; border-radius:12px; background:white; color:#191919; box-shadow:0 8px 24px #0001; font:inherit; font-size:13px; z-index:100; max-width:calc(100vw - 32px); overflow-wrap:anywhere; }
+.curation-banner-link { display:block; color:inherit; text-decoration:none; }
+.curation-source-label a { color:inherit; text-decoration:none; }
+@media(prefers-reduced-motion:reduce) { .note-link-rim rect { animation:none; } .note-link-rim { transition:none; } }
+
+.curation-card h2 > .note-title-link,.curation-card h3 > .note-title-link { font:inherit; letter-spacing:inherit; line-height:inherit; color:inherit; padding:0; border:0; background:transparent; border-radius:0; }
+
+/* Cast the moving glow outwards; mask the card interior rather than clipping the bloom. */
+.note-link-rim { overflow:visible; padding:48px; inset:-48px; border-radius:0; mask-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff); mask-clip:border-box,content-box; mask-composite:exclude; -webkit-mask-image:linear-gradient(#fff,#fff),linear-gradient(#fff,#fff); -webkit-mask-clip:border-box,content-box; -webkit-mask-composite:xor; }
+.note-link-rim svg { overflow:visible; }
+
+.note-link-rim { mask-clip:border-box; -webkit-mask-clip:border-box; mask-composite:add; -webkit-mask-composite:source-over; mask-size:100% 100%; mask-repeat:no-repeat; }

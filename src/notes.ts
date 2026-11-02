@@ -1,6 +1,9 @@
+import { attachNoteLink, highlightNote } from './note-links.ts';
 // Notes: formulas, snippets, and references for better interfaces.
 
 import "./favicon-spin.ts";
+import { shadowWidget } from "./shadow-widget.ts";
+import { frequencyCard, isFrequencyPinned } from "./frequency-player.ts";
 import "./online-status.ts";
 import { phosphorIcon } from "./phosphor-icons.ts";
 
@@ -15,7 +18,8 @@ type CategoryId =
     | "fonts"
     | "tools"
     | "components"
-    | "color";
+    | "color"
+    | "audio";
 
 type Category = {
     id: CategoryId;
@@ -30,11 +34,12 @@ type Item = {
     description: string;
     // Existing resource previews can use their original OG images.
     ogImage?: string;
-    kind?: "formula" | "snippet";
+    kind?: "formula" | "snippet" | "audio" | "shadow";
     preview?: string;
 };
 
 const CATEGORIES: readonly Category[] = [
+    { id: "audio", label: "Audio" },
     { id: "formulas", label: "Formulas" },
     { id: "snippets", label: "Snippets" },
     { id: "resources", label: "Resources" },
@@ -46,26 +51,37 @@ const CATEGORIES: readonly Category[] = [
 ];
 
 const ITEMS: readonly Item[] = [
-    {
-        title: "Quiet Scrollbars", source: "Rauno Freiberg", url: "https://x.com/raunofreiberg/status/2048057305439039535", category: "snippets", kind: "snippet",
-        description: "A small CSS detail. Copy the prompt and give it to your coding agent.",
-    },
+    { title: "Frequencies", source: "Personal listening", url: "", category: "audio", kind: "audio", description: "Three binaural background sessions." },
     {
         title: "Consistent Radii Beyond 90°", source: "Geometry", url: "", category: "formulas", kind: "formula",
         description: "Keep the same distance from the vertex to where the curve meets each edge. Start with a 90° radius r, then find the circular radius R for an interior angle θ.",
     },
     {
-        title: "Best Designs on X",
-        source: "bestdesignsonx.com",
-        url: "https://bestdesignsonx.com/?ref=uigoodies.com",
-        category: "inspiration",
-        description:
-            "Hand-picked design inspiration from top creatives on X — logos, UI, and branding, refreshed hourly.",
-        ogImage: "https://bestdesignsonx.com/og-image.png",
+        kind: "shadow", title: "Shadow Elevation Generator", source: "codepen.io · jshmllr", url: "https://codepen.io/jshmllr/pen/LERqgQa", category: "resources", ogImage: "https://shots.codepen.io/username/pen/LERqgQa-800.jpg?version=1776435755",
+        description: "A saved CodePen by jshmllr. Open the pen to explore the demo and its source.",
     },
     {
-        title: "Shadow Elevation Generator", source: "codepen.io · jshmllr", url: "https://codepen.io/jshmllr/pen/LERqgQa", category: "resources", ogImage: "https://shots.codepen.io/username/pen/LERqgQa-800.jpg?version=1776435755",
-        description: "A saved CodePen by jshmllr. Open the pen to explore the demo and its source.",
+        title: "Quiet Scrollbars", source: "Rauno Freiberg", url: "https://x.com/raunofreiberg/status/2048057305439039535", category: "snippets", kind: "snippet",
+        description: "A small CSS detail. Copy the prompt and give it to your coding agent.",
+    },
+    {
+        title: "Bencho Finds", source: "bencho.dev", url: "https://bencho.dev/finds", category: "inspiration",
+        description: "A curated collection of interfaces, interactions, animations, and small design details.",
+        ogImage: "https://bencho.dev/share-cover-ring.png",
+    },
+    {
+        title: "Viewport UI",
+        source: "viewport-ui.design",
+        url: "https://viewport-ui.design/",
+        category: "inspiration",
+        description:
+            "A running feed of curated UI experiments. Good for snapping out of a stale visual loop.",
+        ogImage: "https://viewport-ui.design/images/meta-image.jpg",
+    },
+    {
+        title: "Cue", source: "cuedesign.space", url: "https://www.cuedesign.space/", category: "inspiration",
+        description: "Hand-picked UI component references with AI prompts for building distinctive interfaces.",
+        ogImage: "https://cuedesign.space/og-image.png",
     },
     {
         title: "Transitions", source: "transitions.dev", url: "https://transitions.dev/", category: "resources",
@@ -81,13 +97,13 @@ const ITEMS: readonly Item[] = [
         description: "An interactive reference for interface details, from concentric corners to animation and typography.",
     },
     {
-        title: "Viewport UI",
-        source: "viewport-ui.design",
-        url: "https://viewport-ui.design/",
+        title: "Best Designs on X",
+        source: "bestdesignsonx.com",
+        url: "https://bestdesignsonx.com/?ref=uigoodies.com",
         category: "inspiration",
         description:
-            "A running feed of curated UI experiments. Good for snapping out of a stale visual loop.",
-        ogImage: "https://viewport-ui.design/images/meta-image.jpg",
+            "Hand-picked design inspiration from top creatives on X: logos, UI, and branding, refreshed hourly.",
+        ogImage: "https://bestdesignsonx.com/og-image.png",
     },
 ];
 
@@ -125,7 +141,7 @@ function renderTabs(): void {
         btn.setAttribute("aria-pressed", t.id === activeCategory ? "true" : "false");
         btn.innerHTML =
             '<span class="tab-label">' + t.label + "</span>" +
-            '<span class="tab-count tnum">' + t.count + "</span>";
+            '<span class="tab-count">' + t.count + "</span>";
         btn.addEventListener("click", () => {
             activeCategory = t.id;
             renderTabs();
@@ -153,18 +169,33 @@ function renderGrid(): void {
     emptyEl.style.display = "none";
     gridEl.style.display = "grid";
 
-    for (const item of filtered) {
+    const ordered = isFrequencyPinned()
+        ? [...filtered].sort((a, b) => Number(b.kind === "audio") - Number(a.kind === "audio"))
+        : filtered;
+    for (const item of ordered) {
+        if (item.kind === "shadow") {
+            const shadow = shadowWidget();
+            attachNoteLink(shadow, sectionId(item));
+            gridEl.appendChild(shadow);
+            masonryObserver.observe(shadow);
+            continue;
+        }
+        if (item.kind === "audio") {
+            const audio = frequencyCard();
+            attachNoteLink(audio, sectionId(item));
+            gridEl.appendChild(audio);
+            masonryObserver.observe(audio);
+            continue;
+        }
         if (item.kind) {
             const note = renderNote(item);
+            attachNoteLink(note, sectionId(item));
             gridEl.appendChild(note);
             masonryObserver.observe(note);
             continue;
         }
-        const card = document.createElement("a");
+        const card = document.createElement("article");
         card.className = "curation-card";
-        card.href = item.url;
-        card.target = "_blank";
-        card.rel = "noopener noreferrer";
 
         card.innerHTML =
             (item.ogImage
@@ -183,6 +214,17 @@ function renderGrid(): void {
             banner.classList.add("resource-preview");
             banner.textContent = item.title;
         });
+        const banner = card.querySelector('.curation-banner')!;
+        const external = document.createElement('a');
+        external.className = 'curation-banner-link';
+        external.href = item.url; external.target = '_blank'; external.rel = 'noopener noreferrer';
+        external.setAttribute('aria-label', `Visit ${item.title}`);
+        banner.replaceWith(external); external.append(banner);
+        const source = card.querySelector('.curation-source-label')!;
+        const sourceLink = external.cloneNode(false) as HTMLAnchorElement;
+        sourceLink.className = ''; sourceLink.textContent = item.source;
+        source.replaceChildren(sourceLink);
+        attachNoteLink(card, sectionId(item));
         gridEl.appendChild(card);
         masonryObserver.observe(card);
     }
@@ -506,5 +548,34 @@ const masonryObserver = new ResizeObserver((entries) => {
     }
 });
 
+gridEl.addEventListener("frequency-pin-change", () => {
+    const audio = frequencyCard();
+    if (isFrequencyPinned()) gridEl.prepend(audio);
+    else {
+        const first = [...gridEl.children].find(child => child !== audio);
+        if (first) first.after(audio);
+    }
+    audio.querySelector<HTMLButtonElement>("[data-pin]")?.focus({ preventScroll: true });
+});
 renderTabs();
 renderGrid();
+
+function sectionId(item: Item): string {
+    if (item.kind === 'shadow') return 'shadow-elevation';
+    return item.title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+async function openSection(): Promise<void> {
+    let id: string;
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    if (!ITEMS.some(item => sectionId(item) === id)) return;
+    if (!document.getElementById(id)) { activeCategory = 'all'; renderTabs(); renderGrid(); }
+    await document.fonts.ready;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        const card = document.getElementById(id);
+        if (!card) return;
+        card.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+        highlightNote(card);
+    }));
+}
+window.addEventListener('hashchange', openSection);
+void openSection();

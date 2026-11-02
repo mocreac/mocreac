@@ -16,11 +16,16 @@
   "homepage": "https://mocreac.com",
   "license": "ISC",
   "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",
-    "canvas-confetti": "^1.9.4"
+    "canvas-confetti": "^1.9.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sonner": "^2.0.8"
   }
 }

@@ -7,8 +7,8 @@
         <link rel="canonical" href="https://mocreac.com/notes/" />
         <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -155,6 +155,8 @@
             }
             .tab.is-active .tab-count { color: var(--sand-400); }
             .tab-count {
+                font-family: "Onest", ui-sans-serif, system-ui, sans-serif;
+                font-variant-numeric: normal;
                 color: var(--sand-400);
                 font-size: 12px;
                 font-weight: 500;
@@ -269,7 +271,7 @@
             .notes-intro { color: var(--sand-500); font-size: 14px; margin: 6px 0 24px; }
             .notes-grid { align-items: start; }
             .note-content { padding: 18px 14px 14px; }
-            .note-kind { display: block; font-size: 11px; color: var(--sand-500); margin-bottom: 10px; }
+            .note-kind { display: block; font-size: 11px; color: var(--sand-500); margin-bottom: 4px; }
             .note-content h2 { font-size: 18px; font-weight: 600; line-height: 1.3; margin-bottom: 10px; }
             .note-description { color: var(--sand-600); font-size: 13px; line-height: 1.65; margin-top: 10px; }
             .note-description code { font-size: 12px; }
@@ -388,7 +390,7 @@
     </head>
     <body class="bg-[var(--sand-50)] text-gray-900 min-h-screen flex flex-col">
         <header class="py-6 flex items-center gap-4 max-w-[912px] w-full mx-auto">
-            <a href="/" class="inline-flex shrink-0" aria-label="George Mocreac — Home">
+            <a href="/" class="inline-flex shrink-0" aria-label="George Mocreac: Home">
                 <img src="/logo.svg" alt="George Mocreac" class="shrink-0 w-[2.97rem] h-[2.97rem] sm:w-[3.7125rem] sm:h-[3.7125rem]" />
             </a>
             <div>
@@ -405,7 +407,7 @@
                 <section>
                     <div class="notes-grid" id="notes-grid"></div>
                     <div class="empty-state" id="empty-state">
-                        Nothing in this category yet — check back soon.
+                        Nothing in this category yet: check back soon.
                     </div>
                 </section>
             </div>
