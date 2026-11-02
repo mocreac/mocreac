@@ -34,7 +34,7 @@ type Item = {
     description: string;
     // Existing resource previews can use their original OG images.
     ogImage?: string;
-    kind?: "formula" | "snippet" | "audio" | "shadow";
+    kind?: "formula" | "snippet" | "audio" | "shadow" | "skills";
     preview?: string;
 };
 
@@ -85,18 +85,8 @@ const ITEMS: readonly Item[] = [
         ogImage: "https://cuedesign.space/og-image.png",
     },
     {
-        title: "Stageshow",
-        source: "Benji Taylor · Agent skill",
-        url: "https://github.com/benjitaylor/skills/tree/main/stageshow",
-        category: "tools",
-        description: "An agent skill for building product UI illustrations, feature cards, cursor demos, and bento grids in React. Install: npx skills add benjitaylor/skills --skill stageshow",
-    },
-    {
-        title: "Skills for Designers and Engineers",
-        source: "Emil Kowalski · Agent skills",
-        url: "https://github.com/emilkowalski/skills",
-        category: "tools",
-        description: "Agent skills for interface design, animation, and interaction polish. Install: npx skills@latest add emilkowalski/skills",
+        title: "Skills", source: "Agent skills", url: "", category: "snippets", kind: "skills",
+        description: "Install agent skills from Benji, Emil, and Jakub.",
     },
     {
         title: "Transitions", source: "transitions.dev", url: "https://transitions.dev/", category: "resources",
@@ -110,6 +100,11 @@ const ITEMS: readonly Item[] = [
     {
         title: "Interface Cheat Sheet", source: "interfaces.dev", url: "https://interfaces.dev/cheat-sheet", category: "resources", ogImage: "https://ho1jr3x2dcwdu3t5.public.blob.vercel-storage.com/og-image.png",
         description: "An interactive reference for interface details, from concentric corners to animation and typography.",
+    },
+    {
+        title: "Sonner", source: "sonner.emilkowal.ski", url: "https://sonner.emilkowal.ski/", category: "resources",
+        description: "An opinionated toast component for React by Emil Kowalski.",
+        ogImage: "https://sonner.emilkowal.ski/opengraph-image.png?d5e368c2f1b9b507",
     },
     {
         title: "Best Designs on X",
@@ -202,9 +197,13 @@ function renderGrid(animate = false): void {
     emptyEl.style.display = "none";
     gridEl.style.display = "grid";
 
-    const ordered = isFrequencyPinned()
-        ? [...filtered].sort((a, b) => Number(b.kind === "audio") - Number(a.kind === "audio"))
-        : filtered;
+    const ordered = [...filtered].sort((a, b) => {
+        if (isFrequencyPinned()) {
+            const pinned = Number(b.kind === "audio") - Number(a.kind === "audio");
+            if (pinned) return pinned;
+        }
+        return Number(Boolean(b.kind)) - Number(Boolean(a.kind));
+    });
     for (const item of ordered) {
         if (item.kind === "shadow") {
             const shadow = shadowWidget();
@@ -405,7 +404,50 @@ function cornerDiagram(angle: number, setback: number, label: string, interactiv
 function renderNote(item: Item): HTMLElement {
     const card = document.createElement("article");
     card.className = "curation-card";
-    const heading = `<div class="note-content"><span class="note-kind">${item.kind === "formula" ? "Formula" : "Prompt"}</span><h2>${escapeText(item.title)}</h2>`;
+    const heading = `<div class="note-content"><span class="note-kind">${item.kind === "formula" ? "Formula" : item.kind === "skills" ? "Snippet" : "Prompt"}</span><h2>${escapeText(item.title)}</h2>`;
+    if (item.kind === "skills") {
+        const commands = [
+            { name: 'Emil', command: 'npx skills@latest add emilkowalski/skills' },
+            { name: 'Jakub', command: 'npx skills add jakubkrehel/skills' },
+            { name: 'Benji', command: 'npx skills add benjitaylor/skills --skill stageshow' },
+        ];
+        card.classList.add('skills-card');
+        card.innerHTML = heading + `<div class="skills-tabs" role="tablist" aria-label="Skill author">${commands.map((entry, index) => `<button type="button" class="tab${index === 0 ? ' is-active' : ''}" role="tab" id="skill-tab-${index}" aria-controls="skill-command" aria-selected="${index === 0}" tabindex="${index === 0 ? 0 : -1}">${entry.name}</button>`).join('')}</div>
+            <pre class="code-block" role="tabpanel" id="skill-command" aria-labelledby="skill-tab-0" tabindex="0"><code></code></pre>
+            <div class="note-actions"><button type="button" class="copy-button" data-copy-skill style="min-width:110px">Copy Skill</button></div>
+            <p class="copy-feedback" role="status"></p></div>`;
+        let selected = 0;
+        const tabs = [...card.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+        const code = card.querySelector('code')!;
+        const panel = card.querySelector('[role="tabpanel"]')!;
+        const copy = card.querySelector<HTMLButtonElement>('[data-copy-skill]')!;
+        let reset: ReturnType<typeof setTimeout>;
+        const select = (index: number) => {
+            selected = index;
+            clearTimeout(reset);
+            copy.textContent = 'Copy Skill';
+            code.textContent = commands[index].command;
+            panel.setAttribute('aria-labelledby', `skill-tab-${index}`);
+            tabs.forEach((tab, i) => { tab.classList.toggle('is-active', i === index); tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+        };
+        tabs.forEach((tab, i) => {
+            tab.addEventListener('click', () => select(i));
+            tab.addEventListener('keydown', event => {
+                const index = event.key === 'ArrowRight' ? (i + 1) % 3 : event.key === 'ArrowLeft' ? (i + 2) % 3 : event.key === 'Home' ? 0 : event.key === 'End' ? 2 : -1;
+                if (index < 0) return;
+                event.preventDefault(); select(index); tabs[index].focus();
+            });
+        });
+        copy.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(commands[selected].command);
+                copy.textContent = 'Copied!';
+                reset = setTimeout(() => { copy.textContent = 'Copy Skill'; }, 2000);
+            } catch { card.querySelector('.copy-feedback')!.textContent = 'Select and copy the command above.'; }
+        });
+        select(0);
+        return card;
+    }
     if (item.kind === "formula") {
         card.innerHTML = heading + `
             <div class="formula" role="math" aria-label="R equals r times tangent of theta over two"><span><i title="Radius at this angle">R</i> = <i title="Radius at 90°">r</i> · tan(</span><span class="fraction"><span title="Interior angle">θ</span><span>2</span></span><span>)</span></div>
