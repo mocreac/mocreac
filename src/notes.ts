@@ -85,6 +85,10 @@ const ITEMS: readonly Item[] = [
         ogImage: "https://cuedesign.space/og-image.png",
     },
     {
+        title: "Text Wrapping", source: "Jakub Krehel", url: "https://jakub.kr/writing/details-that-make-interfaces-feel-better", category: "snippets", kind: "snippet",
+        description: "Balance titles and improve wrapping in subtitles.",
+    },
+    {
         title: "Font Smoothing", source: "Gustavo Fior · Craft", url: "https://craft.gustavofior.com/font-smoothing", category: "snippets", kind: "snippet",
         description: "Grayscale font smoothing on macOS.",
     },
@@ -295,6 +299,11 @@ function renderGrid(animate = false): void {
         }
     }
 }
+
+const TEXT_WRAPPING_PROMPT = `Improve typography wrapping in the existing design system. Apply text-wrap: balance to titles and text-wrap: pretty to subtitles and descriptions. Use the project's existing title and subtitle selectors, preserving font sizes, weights, widths, and spacing. Leave code blocks and intentionally single-line controls unchanged. Verify wrapping at mobile and desktop widths; unsupported browsers should retain normal wrapping.
+
+.title { text-wrap: balance; }
+.subtitle { text-wrap: pretty; }`;
 
 const FONT_SMOOTHING_PROMPT = `Apply grayscale font smoothing globally in the existing shared stylesheet:
 
@@ -628,14 +637,14 @@ function renderNote(item: Item): HTMLElement {
     } else {
         card.classList.add("prompt-card");
         const smoothing = item.title === 'Font Smoothing';
-        const prompt = smoothing ? FONT_SMOOTHING_PROMPT : SCROLLBAR_PROMPT;
-        const code = smoothing ? 'body {\n  -webkit-font-smoothing: antialiased;\n}' : 'scrollbar-width: thin;\nscrollbar-color: gray transparent;';
+        const wrapping = item.title === 'Text Wrapping';
+        const prompt = wrapping ? TEXT_WRAPPING_PROMPT : smoothing ? FONT_SMOOTHING_PROMPT : SCROLLBAR_PROMPT;
+        const code = wrapping ? '.title { text-wrap: balance; }\n.subtitle { text-wrap: pretty; }' : smoothing ? 'body {\n  -webkit-font-smoothing: antialiased;\n}' : 'scrollbar-width: thin;\nscrollbar-color: gray transparent;';
         card.innerHTML = heading + `
-                <p class="note-description">${escapeText(smoothing ? "Grayscale antialiasing can make text look lighter and cleaner, especially on dark surfaces. Thin font weights may become harder to read on low-resolution screens." : SCROLLBAR_PROMPT.split("\n\n")[0])}</p>
-                ${smoothing ? '<p class="note-description">macOS only. This non-standard property has no effect on Windows, Linux, iOS, or Android.</p>' : ''}
+                <p class="note-description">${escapeText(wrapping ? "Use balanced lines for titles and pretty wrapping for subtitles and descriptions to reduce isolated words." : smoothing ? "Grayscale antialiasing can make text look lighter and cleaner, especially on dark surfaces. Thin font weights may become harder to read on low-resolution screens." : SCROLLBAR_PROMPT.split("\n\n")[0])}</p>
+                ${smoothing ? '<p class="note-description">macOS only.</p>' : ''}
                 <pre class="code-block"><code>${escapeText(code)}</code></pre>
-                ${smoothing ? '<a class="note-source" href="https://craft.gustavofior.com/font-smoothing" target="_blank" rel="noopener noreferrer">By Gustavo Fior · Craft</a>' : ''}
-                <div class="note-actions"><button type="button" class="copy-button">Copy Prompt</button></div>
+                <div class="note-actions">${smoothing || wrapping ? `<a class="note-source" style="margin-right:auto" href="${escapeAttr(item.url)}" target="_blank" rel="noopener noreferrer">${wrapping ? 'By Jakub Krehel' : 'By Gustavo Fior · Craft'}</a>` : ''}<button type="button" class="copy-button">Copy Prompt</button></div>
                 <p class="copy-feedback" role="status"></p>
             </div>`;
         const button = card.querySelector("button")!;
